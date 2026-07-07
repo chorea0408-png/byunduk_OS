@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>변덕쟁이들 OS</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="hd">
+  <div class="logo" onclick="switchTab('home')" style="cursor:pointer" title="홈으로">변덕쟁이들 <em>OS</em></div>
+  <div class="hd-right">
+    <span class="saved-tag" id="saved-tag">저장 안 됨</span>
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="다크모드 (D)">&#9788;</button>
+    <button class="btn-sm" onclick="openSearch()" title="전체 검색 (Ctrl+K)"><i class="ti ti-search"></i></button>
+    <button class="btn-sm" onclick="openSnapModal()" title="데이터 복원"><i class="ti ti-history"></i></button>
+    <button class="btn-sm" onclick="openSettings()" title="설정"><i class="ti ti-settings"></i>설정</button>
+    <button class="btn-sm" onclick="exportCSV()" title="클라이언트 CSV 내보내기"><i class="ti ti-table-export"></i>CSV</button>
+    <button class="btn-sm" onclick="exportJSON()"><i class="ti ti-download"></i>JSON</button>
+    <button class="btn-sm" onclick="document.getElementById('import-file').click()"><i class="ti ti-upload"></i>불러오기</button>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(this)">
+  </div>
+</header>
+<div class="tabs-wrap">
+  <button class="nav-arr" onclick="scrollTabs(-140)" title="왼쪽">&#9664;</button>
+  <nav class="tabs" id="main-tabs">
+  <button class="tab active" data-tab="home" onclick="switchTab('home')"><i class="ti ti-home"></i>홈</button>
+  <button class="tab" data-tab="crm" onclick="switchTab('crm')"><i class="ti ti-users"></i>파이프라인</button>
+  <button class="tab" data-tab="cap" onclick="switchTab('cap')"><i class="ti ti-activity"></i>Capacity</button>
+  <button class="tab" data-tab="rv" onclick="switchTab('rv')"><i class="ti ti-trending-up"></i>수익 예측</button>
+  <button class="tab" data-tab="prof" onclick="switchTab('prof')"><i class="ti ti-chart-dots"></i>수익성 분석</button>
+  <button class="tab" data-tab="ideas" onclick="switchTab('ideas')"><i class="ti ti-bulb"></i>콘텐츠 보관함</button>
+  <button class="tab" data-tab="retro" onclick="switchTab('retro')"><i class="ti ti-rotate"></i>월간 회고</button>
+  <button class="tab" data-tab="billing" onclick="switchTab('billing')"><i class="ti ti-receipt"></i>청구서</button>
+  <button class="tab" data-tab="letter" onclick="switchTab('letter')"><i class="ti ti-mail"></i>변덕레터</button>
+  <button class="tab" data-tab="channel" onclick="switchTab('channel')"><i class="ti ti-chart-line"></i>채널 성장</button>
+  <button class="tab" data-tab="source" onclick="switchTab('source')"><i class="ti ti-git-branch"></i>유입경로</button>
+  <button class="tab" data-tab="annual" onclick="switchTab('annual')"><i class="ti ti-target"></i>연간 목표</button>
+  <button class="tab" data-tab="action" onclick="switchTab('action')"><i class="ti ti-list-check"></i>액션 보드</button>
+  <button class="tab" data-tab="expense" onclick="switchTab('expense')"><i class="ti ti-report-money"></i>지출</button>
+  <button class="tab" data-tab="tier" onclick="switchTab('tier')"><i class="ti ti-users-group"></i>관계 티어</button>
+  <button class="tab" data-tab="quote" onclick="switchTab('quote')"><i class="ti ti-calculator"></i>견적 자동화</button>
+  <button class="tab" data-tab="memo" onclick="switchTab('memo')"><i class="ti ti-notebook"></i>메모장</button>
+  <button class="tab" data-tab="partner" onclick="switchTab('partner')"><i class="ti ti-user-check"></i>외주 파트너</button>
+</nav>
+  <button class="nav-arr right" onclick="scrollTabs(140)" title="오른쪽">&#9654;</button>
+  <div class="nav-jump-wrap">
+    <button class="nav-jump-btn" id="nav-jump-btn" onclick="toggleNavDrop()" title="모든 탭">&#8942;</button>
+    <div class="nav-drop" id="nav-drop">
+    <div class="nav-grp">핵심</div>
+    <button class="nav-drop-item" data-tab="home" onclick="navJump(this.dataset.tab)"><i class="ti ti-home" style="font-size:13px"></i>홈</button>
+    <button class="nav-drop-item" data-tab="crm" onclick="navJump(this.dataset.tab)"><i class="ti ti-users" style="font-size:13px"></i>파이프라인</button>
+    <button class="nav-drop-item" data-tab="action" onclick="navJump(this.dataset.tab)"><i class="ti ti-list-check" style="font-size:13px"></i>액션 보드</button>
+
+    <div class="nav-grp">영업·분석</div>
+    <button class="nav-drop-item" data-tab="cap" onclick="navJump(this.dataset.tab)"><i class="ti ti-activity" style="font-size:13px"></i>Capacity</button>
+    <button class="nav-drop-item" data-tab="rv" onclick="navJump(this.dataset.tab)"><i class="ti ti-trending-up" style="font-size:13px"></i>수익 예측</button>
+    <button class="nav-drop-item" data-tab="prof" onclick="navJump(this.dataset.tab)"><i class="ti ti-chart-dots" style="font-size:13px"></i>수익성</button>
+    <button class="nav-drop-item" data-tab="source" onclick="navJump(this.dataset.tab)"><i class="ti ti-git-branch" style="font-size:13px"></i>유입경로</button>
+    <button class="nav-drop-item" data-tab="annual" onclick="navJump(this.dataset.tab)"><i class="ti ti-target" style="font-size:13px"></i>연간 목표</button>
+
+    <div class="nav-grp">운영</div>
+    <button class="nav-drop-item" data-tab="billing" onclick="navJump(this.dataset.tab)"><i class="ti ti-receipt" style="font-size:13px"></i>청구서</button>
+    <button class="nav-drop-item" data-tab="expense" onclick="navJump(this.dataset.tab)"><i class="ti ti-report-money" style="font-size:13px"></i>지출</button>
+    <button class="nav-drop-item" data-tab="retro" onclick="navJump(this.dataset.tab)"><i class="ti ti-rotate" style="font-size:13px"></i>월간 회고</button>
+
+    <div class="nav-grp">콘텐츠</div>
+    <button class="nav-drop-item" data-tab="ideas" onclick="navJump(this.dataset.tab)"><i class="ti ti-bulb" style="font-size:13px"></i>콘텐츠 보관함</button>
+    <button class="nav-drop-item" data-tab="letter" onclick="navJump(this.dataset.tab)"><i class="ti ti-mail" style="font-size:13px"></i>변덕레터</button>
+    <button class="nav-drop-item" data-tab="channel" onclick="navJump(this.dataset.tab)"><i class="ti ti-chart-line" style="font-size:13px"></i>채널 성장</button>
+
+    <div class="nav-grp">도구</div>
+    <button class="nav-drop-item" data-tab="memo" onclick="navJump(this.dataset.tab)"><i class="ti ti-notebook" style="font-size:13px"></i>메모장</button>
+    <button class="nav-drop-item" data-tab="quote" onclick="navJump(this.dataset.tab)"><i class="ti ti-calculator" style="font-size:13px"></i>견적 자동화</button>
+    <button class="nav-drop-item" data-tab="partner" onclick="navJump(this.dataset.tab)"><i class="ti ti-user-check" style="font-size:13px"></i>외주 파트너</button>
+    <button class="nav-drop-item" data-tab="tier" onclick="navJump(this.dataset.tab)"><i class="ti ti-users-group" style="font-size:13px"></i>관계 티어</button>
+    </div>
+  </div>
+</div>
+<div class="sheets-bar">
+  <button class="sheets-btn" id="sheets-sync-btn" onclick="syncAllToSheets()" title="Google Sheets에 데이터 동기화">
+    <span class="sheets-btn-dot" id="sheets-dot"></span>
+    <i class="ti ti-table-export" style="font-size:13px" aria-hidden="true"></i>
+    <span id="sheets-btn-txt">Sheets 동기화</span>
+  </button>
+  <span style="font-size:10px;color:var(--text3)" id="sheets-last-lbl"></span>
+  <button class="sheets-btn" onclick="openSheetsModal()" style="margin-left:auto" title="Sheets 연결 설정">
+    <i class="ti ti-settings" style="font-size:12px" aria-hidden="true"></i>
+  </button>
+</div>
+
+<!-- HOME -->
+<section class="panel active" data-tab="home">
+  <div class="hd-hero">
+    <div><div class="hd-greeting" id="hm-greeting"></div><div class="hd-date" id="hm-date"></div></div>
+    <div class="mp-wrap"><div class="mp-top"><span id="hm-month"></span><span id="hm-mpct"></span></div><div class="mp-bg"><div class="mp-fill" id="hm-mfill" style="width:0%"></div></div></div>
+  </div>
+  <div class="qa-row" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+    <div class="qa-card" onclick="switchTab('crm')"><div class="qa-card-icon">&#128101;</div><div class="qa-card-lbl">파이프라인</div></div>
+    <div class="qa-card" onclick="switchTab('rv')"><div class="qa-card-icon">&#128200;</div><div class="qa-card-lbl">수익 예측</div></div>
+    <div class="qa-card" onclick="openModal()"><div class="qa-card-icon">+</div><div class="qa-card-lbl">새 클라이언트</div></div>
+    <div class="qa-card" onclick="switchTab('billing')"><div class="qa-card-icon">&#128203;</div><div class="qa-card-lbl">청구서</div></div>
+    <div class="qa-card" onclick="switchTab('quote')"><div class="qa-card-icon">&#128221;</div><div class="qa-card-lbl">견적</div></div>
+    <div class="qa-card" onclick="switchTab('memo')"><div class="qa-card-icon">&#128204;</div><div class="qa-card-lbl">메모장</div></div>
+    <div class="qa-card" onclick="switchTab('action')"><div class="qa-card-icon">&#9989;</div><div class="qa-card-lbl">액션보드</div></div>
+    <div class="qa-card" onclick="switchTab('partner')"><div class="qa-card-icon">&#128188;</div><div class="qa-card-lbl">파트너</div></div>
+    <div class="qa-card" onclick="switchTab('ideas')"><div class="qa-card-icon">&#128161;</div><div class="qa-card-lbl">콘텐츠 보관함</div></div>
+    <div class="qa-card" onclick="switchTab('source')"><div class="qa-card-icon">&#127881;</div><div class="qa-card-lbl">유입 분석</div></div>
+  </div>
+  <div class="sec-t" style="margin-top:0"><i class="ti ti-bell" style="font-size:13px;margin-right:4px"></i>오늘의 팔로업</div>
+  <div class="al-list" id="hm-alerts"></div>
+  <!-- D-day 카운터 -->
+  <div class="dday-strip" id="hm-dday-strip">
+    <div class="dday-left">
+      <div class="dday-label">&#127881; LAUNCH DAY</div>
+      <div class="dday-name" id="hm-dday-name">변덕쟁이들 정식 런칭</div>
+      <div class="dday-sub" id="hm-dday-sub"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="dday-right">
+        <div class="dday-num" id="hm-dday-num">D-</div>
+        <div class="dday-unit" id="hm-dday-unit">일</div>
+      </div>
+      <button class="dday-edit-btn" onclick="openDdayEdit()">&#9998; 수정</button>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-l">이번 달 예상 매출</div><div class="kpi-v" id="hm-k1">–</div><div class="kpi-trend flat" id="hm-k1-trend"></div><div class="kpi-s" id="hm-k1s"></div><div class="kpi-mini-bar"><div class="kpi-mini-fill" id="hm-k1bar" style="background:var(--teal)"></div></div></div>
+    <div class="kpi"><div class="kpi-l">예상 순수익</div><div class="kpi-v" id="hm-k2">–</div><div class="kpi-s" id="hm-k2s"></div></div>
+    <div class="kpi"><div class="kpi-l">가중 파이프라인</div><div class="kpi-v" id="hm-k3" style="color:var(--amber)">–</div><div class="kpi-s">성사 확률 반영</div></div>
+    <div class="kpi"><div class="kpi-l">Capacity</div><div class="kpi-v" id="hm-k4">–</div><div class="kpi-s" id="hm-k4s"></div><div class="kpi-mini-bar"><div class="kpi-mini-fill" id="hm-k4bar"></div></div></div>
+  </div>
+  <div class="home-two">
+    <div class="home-card"><div class="hc-t"><i class="ti ti-filter" style="font-size:14px"></i>파이프라인 현황<span class="hc-cnt" id="hm-ptotal"></span></div><div id="hm-pipelist"></div></div>
+    <div class="home-card"><div class="hc-t"><i class="ti ti-list-check" style="font-size:14px"></i>이번 주 태스크<span class="hc-cnt" id="hm-tcount"></span></div><div id="hm-tasklist"></div></div>
+  </div>
+  <div class="sec-t" style="margin-top:1rem">주의 필요 클라이언트</div>
+  <div class="home-health-list" id="hm-health-list"></div>
+  <div class="goal-bar-wrap" id="hm-goal-bar"></div>
+  <div class="today-priority" id="hm-priority" style="display:none"></div>
+  <div class="st-bar"><i class="ti ti-bulb"></i><div class="st-txt" id="hm-status"></div></div>
+  <div id="hm-insights" style="margin-top:10px"></div>
+  <div id="hm-patterns" style="margin-top:10px"></div>
+  <div class="gas-settings" id="gas-settings-panel" style="display:none"></div>
+  <div class="dl-wrap" id="hm-deadlines"></div>
+  <div id="hm-monthly-report" style="margin-top:14px"></div>
+  <div class="wk-wrap" id="hm-weekly"></div>
+</section>
+
+<!-- CRM -->
+<section class="panel" data-tab="crm">
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-l">전체 클라이언트</div><div class="kpi-v" id="c-total">0</div><div class="kpi-s">이번 시즌</div></div>
+    <div class="kpi"><div class="kpi-l">파이프라인 예상</div><div class="kpi-v" id="c-pipe" style="color:var(--amber)">0만</div><div class="kpi-s">가중치 반영</div></div>
+    <div class="kpi"><div class="kpi-l">성사 매출</div><div class="kpi-v" id="c-won" style="color:var(--teal)">0만</div><div class="kpi-s">Closed Won</div></div>
+    <div class="kpi"><div class="kpi-l">전환율</div><div class="kpi-v" id="c-rate">0%</div><div class="kpi-s">전체 대비 성사</div></div>
+  </div>
+  <div class="vel-wrap" id="vel-wrap">
+    <button class="vel-toggle" id="vel-toggle" onclick="toggleVelocity()"><i class="ti ti-dashboard" style="font-size:11px"></i>파이프라인 속도 대시보드<i class="ti ti-chevron-down arrow" style="margin-left:auto"></i></button>
+    <div class="vel-body" id="vel-body"><div class="vel-kpi-row" id="vel-kpi-row"></div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:6px">단계별 평균 체류일</div><div class="vel-stages" id="vel-stages"></div><div id="vel-bottleneck-msg"></div></div>
+  </div>
+  <div class="crm-search-bar">
+    <div class="crm-search-wrap">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input class="crm-search-input" id="crm-search" type="search" placeholder="클라이언트 이름 검색..." oninput="applyCrmFilter()" autocomplete="off">
+    </div>
+    <div class="crm-filter-row" id="crm-stage-filters"></div>
+    <div class="crm-filter-v2" id="crm-filter-v2">
+      <div class="crm-fp" id="fp-svc">
+        <button class="crm-fp-btn" id="fp-svc-btn" onclick="toggleFpDrop('fp-svc')"><i class="ti ti-briefcase" style="font-size:11px"></i>서비스 <i class="ti ti-chevron-down" style="font-size:9px"></i></button>
+        <div class="crm-fp-drop" id="fp-svc-drop"></div>
+      </div>
+      <div class="crm-fp" id="fp-tag">
+        <button class="crm-fp-btn" id="fp-tag-btn" onclick="toggleFpDrop('fp-tag')"><i class="ti ti-tag" style="font-size:11px"></i>태그 <i class="ti ti-chevron-down" style="font-size:9px"></i></button>
+        <div class="crm-fp-drop" id="fp-tag-drop"></div>
+      </div>
+      <div class="crm-fp" id="fp-src">
+        <button class="crm-fp-btn" id="fp-src-btn" onclick="toggleFpDrop('fp-src')"><i class="ti ti-git-branch" style="font-size:11px"></i>유입 <i class="ti ti-chevron-down" style="font-size:9px"></i></button>
+        <div class="crm-fp-drop" id="fp-src-drop"></div>
+      </div>
+      <span class="crm-result-msg" id="crm-result-msg"></span>
+      <button class="crm-v2-clear" id="crm-reset" onclick="resetCrmFilter()" style="display:none">× 초기화</button>
+    </div>
+  </div>
+  <div class="toolbar">
+  <div class="view-toggle">
+    <button class="vt-btn on" id="vt-kanban" onclick="setCrmView('kanban')"><i class="ti ti-layout-columns" style="font-size:13px" aria-hidden="true"></i>칸반</button>
+    <button class="vt-btn" id="vt-list" onclick="setCrmView('list')"><i class="ti ti-list" style="font-size:13px" aria-hidden="true"></i>리스트</button>
+  </div>
+  <span style="font-size:12px;color:var(--text2)">카드 클릭 시 상세 패널</span><button class="btn btn-primary" onclick="openModal()"><i class="ti ti-plus" style="font-size:13px;margin-right:3px"></i>새 클라이언트</button></div>
+  <div class="kanban" id="kanban"></div>
+  <table class="crm-list-view" id="crm-list-view">
+    <thead><tr>
+      <th style="width:32px"></th>
+      <th>이름</th><th>서비스</th><th>단계</th><th>금액</th>
+      <th>LTV</th><th>팔로업</th><th>유입</th>
+    </tr></thead>
+    <tbody id="crm-list-body"></tbody>
+  </table>
+</section>
+
+<!-- CAPACITY -->
+<section class="panel" data-tab="cap">
+  <div class="strip"><div class="strip-item"><i class="ti ti-clock" style="font-size:16px;color:var(--text2)"></i><label>주간 실질 가용시간</label><input type="range" id="cap-sl" min="5" max="60" value="20" step="1" oninput="onCapSl(this.value)"><span class="val" id="cap-sv">20h</span></div></div>
+  <div class="gauge-wrap">
+    <svg width="210" height="175" viewBox="0 0 210 175" role="img" aria-label="Capacity 게이지" style="flex-shrink:0">
+      <path id="g-bg" fill="none" stroke-width="16" stroke-linecap="round"/>
+      <path id="g-fill" fill="none" stroke-width="16" stroke-linecap="round"/>
+      <text id="g-pct" x="105" y="112" text-anchor="middle" font-size="30" font-weight="700" font-family="inherit" fill="#1a1a18">0%</text>
+      <text id="g-hrs" x="105" y="133" text-anchor="middle" font-size="12" font-family="inherit" fill="#6b6b65">0 / 20h</text>
+      <text x="105" y="155" text-anchor="middle" font-size="11" font-family="inherit" fill="#9c9a92">주간 부하</text>
+    </svg>
+    <div class="gauge-info">
+      <div class="gauge-badge" id="cap-badge"></div>
+      <div class="gauge-msg" id="cap-msg"></div>
+      <div class="gauge-kpis">
+        <div class="gauge-kpi"><div class="kpi-l">가용</div><div class="kpi-v" id="cap-k1">20h</div></div>
+        <div class="gauge-kpi"><div class="kpi-l">사용 중</div><div class="kpi-v" id="cap-k2">0h</div></div>
+        <div class="gauge-kpi"><div class="kpi-l">여유</div><div class="kpi-v" id="cap-k3">20h</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec-t">활성 프로젝트 (Closed Won 기준)</div>
+  <div class="plist" id="cap-list"></div>
+  <div id="cap-warn"></div>
+  <p style="font-size:11px;color:var(--text3);margin-top:10px">* CRM 파이프라인의 Closed Won 항목에서 자동으로 불러옵니다.</p>
+</section>
+
+<!-- REVENUE -->
+<section class="panel" data-tab="rv">
+  <div class="sc-row">
+    <button class="sc-btn opt" data-sc="opt" onclick="setSc(this.dataset.sc)">🟢 낙관 (×1.3)</button>
+    <button class="sc-btn neu on" data-sc="neu" onclick="setSc(this.dataset.sc)">🔵 중립 (×1.0)</button>
+    <button class="sc-btn pes" data-sc="pes" onclick="setSc(this.dataset.sc)">🔴 비관 (×0.7)</button>
+    <span style="font-size:11px;color:var(--text2);margin-left:auto;align-self:center" id="sc-cur-lbl">현재 시나리오: 중립</span>
+  </div>
+  <div class="sc-compare" id="sc-compare"></div>
+  <div class="strip">
+    <div class="strip-item"><i class="ti ti-target"  style="font-size:16px;color:var(--text2)"></i><label>목표 월 매출</label><input type="range" id="rv-tsl" min="50" max="600" value="200" step="10" oninput="onRvSl()"><span class="val" id="rv-tv">200만</span></div>
+    <div class="strip-item"><i class="ti ti-receipt" style="font-size:16px;color:var(--text2)"></i><label>월 고정비</label><input type="range" id="rv-csl" min="0" max="150" value="30" step="5" oninput="onRvSl()"><span class="val" id="rv-cv">30만</span></div>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-l">이번 달 예상</div><div class="kpi-v" id="rv-k1">0만</div><div class="kpi-s" id="rv-k1s">확정 + 협상 기대</div></div>
+    <div class="kpi"><div class="kpi-l">예상 순수익</div><div class="kpi-v" id="rv-k2">0만</div><div class="kpi-s" id="rv-k2s">고정비 차감</div></div>
+    <div class="kpi"><div class="kpi-l">가중 파이프라인</div><div class="kpi-v" id="rv-k3" style="color:var(--amber)">0만</div><div class="kpi-s">성사 확률 반영</div></div>
+    <div class="kpi"><div class="kpi-l">목표까지</div><div class="kpi-v" id="rv-k4">0만</div><div class="kpi-s" id="rv-k4s"></div></div>
+  </div>
+  <div class="legend">
+    <div class="leg"><div class="leg-sq" style="background:#1D9E75"></div>확정 매출</div>
+    <div class="leg"><div class="leg-sq" style="background:#EF9F27bb"></div>파이프라인 기대</div>
+    <div class="leg"><div class="leg-sq" style="background:#7F77DD;height:3px;border-radius:0;margin:4px 0"></div>목표선</div>
+    <div class="leg"><div style="width:16px;height:0;border-top:2px dashed #E24B4A;margin:5px 0"></div>손익분기</div>
+  </div>
+  <div class="chart-area"><canvas id="rv-canvas" role="img" aria-label="6개월 수익 예측 바 차트">6개월 수익 예측</canvas></div>
+  <div class="sec-t">월별 전망</div><div class="fc-row" id="rv-fc"></div>
+  <div class="sec-t">시나리오 시뮬레이터</div>
+  <div class="scenario-btns">
+    <button class="s-btn" onclick="addScenario(30,'won')">SNS 월정액 +1 <b style="color:var(--teal)">+30만</b></button>
+    <button class="s-btn" onclick="addScenario(100,'neg')">광고 수주 <b style="color:var(--amber)">+100만</b></button>
+    <button class="s-btn" onclick="addScenario(80,'prop')">브랜딩 제안 <b style="color:var(--amber)">+80만</b></button>
+    <button class="s-btn" onclick="addScenario(50,'prop')">콘텐츠 제안 <b style="color:var(--amber)">+50만</b></button>
+    <button class="s-btn" style="color:var(--text2)" onclick="resetScenario()">↺ 리셋</button>
+  </div>
+  <p style="font-size:11px;color:var(--text3);margin-top:8px">* 파이프라인 금액은 CRM 데이터에서 자동 계산됩니다.</p>
+  <div class="ai-assist-wrap" id="rv-ai-section"></div>
+  <div class="fc-wrap">
+    <div class="fc-hd">&#128200; 12개월 수익 예측
+      <div class="fc-legend">
+        <span><i style="background:var(--teal)"></i>확정 MRR</span>
+        <span><i style="background:var(--teal);opacity:.35"></i>파이프라인</span>
+        <span><i style="background:#F0C040;border-radius:0"></i>목표선</span>
+      </div>
+    </div>
+    <div class="fc-svg-wrap"><div class="fc-tooltip" id="fc-tip"></div>
+      <svg class="fc-svg" id="fc-svg" viewBox="0 0 760 200" preserveAspectRatio="none"></svg>
+    </div>
+  </div>
+</section>
+
+<!-- PROFITABILITY -->
+<section class="panel" data-tab="prof">
+  <div class="toolbar">
+    <div style="font-size:12px;color:var(--text2)">서비스별 시간당 수익률 — 높을수록 효율적</div>
+    <div class="tg-grp"><button class="tg-b on" onclick="setProfMode('all')">전체</button><button class="tg-b" onclick="setProfMode('won')">Won만</button></div>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-l">최고 시간당 수익</div><div class="kpi-v" id="pr-k1">–</div><div class="kpi-s" id="pr-k1s"></div></div>
+    <div class="kpi"><div class="kpi-l">활성 서비스 유형</div><div class="kpi-v" id="pr-k2">–</div><div class="kpi-s">클라이언트 있음</div></div>
+    <div class="kpi"><div class="kpi-l">총 매출 합계</div><div class="kpi-v" id="pr-k3">–</div><div class="kpi-s" id="pr-k3s"></div></div>
+    <div class="kpi"><div class="kpi-l">추천 집중 서비스</div><div class="kpi-v" id="pr-k4" style="font-size:14px">–</div><div class="kpi-s">시간당 효율 기준</div></div>
+  </div>
+  <div style="position:relative;height:220px;margin-bottom:1rem"><canvas id="prof-canvas" role="img" aria-label="서비스 유형별 시간당 수익률">시간당 수익률 비교</canvas></div>
+  <div class="prof-grid" id="prof-cards"></div>
+  <div class="sec-t">시나리오 — 1개 더 수주하면?</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+    <button class="s-btn" onclick="profSim(0)">SNS 월정액 +1</button>
+    <button class="s-btn" onclick="profSim(1)">광고 기획 +1</button>
+    <button class="s-btn" onclick="profSim(2)">브랜딩 +1</button>
+    <button class="s-btn" onclick="profSim(3)">콘텐츠 기획 +1</button>
+    <button class="s-btn" onclick="profSim(4)">단발 프로젝트 +1</button>
+  </div>
+  <div id="prof-sim" style="font-size:12px;color:var(--text2);min-height:20px;line-height:1.6"></div>
+  <!-- v29 analytics -->
+  <div class="v29-sec">
+    <div class="v29-sec-ttl"><i class="ti ti-chart-bar" style="font-size:12px"></i>서비스 믹스 수익성 분석</div>
+    <div id="pr-service-mix"></div>
+  </div>
+  <div class="v29-sec">
+    <div class="v29-sec-ttl"><i class="ti ti-target" style="font-size:12px"></i>파이프라인 예측 정확도</div>
+    <div id="pr-accuracy"></div>
+    <div id="pr-close-acc"></div>
+  </div>
+  <div class="v29-sec">
+    <div class="v29-sec-ttl"><i class="ti ti-clock" style="font-size:12px"></i>서비스별 평균 클로징 기간</div>
+    <div id="pr-closing-time"></div>
+  </div>
+</section>
+
+<!-- IDEAS -->
+<section class="panel" data-tab="ideas">
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-l">전체</div><div class="kpi-v" id="id-k1">0</div><div class="kpi-s">아이디어</div></div>
+    <div class="kpi"><div class="kpi-l">초안 중</div><div class="kpi-v" id="id-k2" style="color:var(--amber)">0</div><div class="kpi-s">작성 진행</div></div>
+    <div class="kpi"><div class="kpi-l">발행 완료</div><div class="kpi-v" id="id-k3" style="color:var(--teal)">0</div><div class="kpi-s">이번 시즌</div></div>
+    <div class="kpi"><div class="kpi-l">아이디어 단계</div><div class="kpi-v" id="id-k4" style="color:var(--purple)">0</div><div class="kpi-s">발굴 중</div></div>
+  </div>
+  <div class="ideas-add">
+    <input id="id-title" placeholder="새 아이디어 제목 입력..." onkeydown="if(event.key==='Enter')addIdea()">
+    <select id="id-ch"><option>인스타</option><option>변덕레터</option><option>블로그</option><option>유튜브</option><option>쓰레드</option></select>
+    <select id="id-tag"><option>브랜딩</option><option>마케팅</option><option>변덕랩</option><option>트렌드</option><option>일상</option><option>AI</option><option>소상공인</option><option>맘대루</option></select>
+    <button class="btn btn-primary" onclick="addIdea()"><i class="ti ti-plus" style="font-size:13px;margin-right:3px"></i>추가</button>
+  </div>
+  <div class="fil-row" id="id-sf"></div>
+  <div class="fil-row" id="id-cf"></div>
+  <div class="idea-grid" id="idea-grid"></div>
+</section>
+
+<!-- RETRO -->
+<section class="panel" data-tab="retro">
+  <div class="retro-hd">
+    <div><div class="retro-ttl" id="rt-title"></div>
+    <button class="btn" onclick="autoFillRetro()" style="font-size:11px;padding:4px 10px;margin-top:4px"><i class="ti ti-history" style="font-size:12px" aria-hidden="true"></i> 전월 비교 자동채우기</button><div class="retro-sub" id="rt-sub"></div></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="done-pill" id="rt-pill">작성 0%</span>
+      <button class="btn-sm" onclick="rtNav(-1)"><i class="ti ti-chevron-left"></i></button>
+      <button class="btn-sm" onclick="rtNav(1)"><i class="ti ti-chevron-right"></i></button>
+    </div>
+  </div>
+  <div class="sec-t" style="margin-top:0"><i class="ti ti-chart-bar" style="font-size:13px;margin-right:4px"></i>이달 실적</div>
+  <div class="ach-g">
+    <div class="ach-c"><div class="ach-lbl">매출 실적</div><div class="ach-in"><input type="number" id="rt-arev" placeholder="0" oninput="rtAch()"><span class="ach-unit">만원</span></div><div class="ach-tgt" id="rt-revtgt">목표 –</div><div class="ach-bg"><div class="ach-fi" id="rt-revbar" style="width:0%"></div></div><div class="ach-pct" id="rt-revpct" style="color:var(--text3)">–</div></div>
+    <div class="ach-c"><div class="ach-lbl">신규 클라이언트</div><div class="ach-in"><input type="number" id="rt-acli" placeholder="0" oninput="rtAch()"><span class="ach-unit">명</span></div><div class="ach-tgt" id="rt-clitgt">목표 –</div><div class="ach-bg"><div class="ach-fi" id="rt-clibar" style="width:0%;background:#534AB7"></div></div><div class="ach-pct" id="rt-clipct" style="color:var(--text3)">–</div></div>
+    <div class="ach-c"><div class="ach-lbl">콘텐츠 발행</div><div class="ach-in"><input type="number" id="rt-acon" placeholder="0" oninput="rtAch()"><span class="ach-unit">건</span></div><div class="ach-tgt" id="rt-contgt">목표 –</div><div class="ach-bg"><div class="ach-fi" id="rt-conbar" style="width:0%;background:#854F0B"></div></div><div class="ach-pct" id="rt-conpct" style="color:var(--text3)">–</div></div>
+    <div class="ach-c"><div class="ach-lbl">평균 Capacity</div><div class="ach-in"><input type="number" id="rt-acap" placeholder="0" max="100" oninput="rtAch()"><span class="ach-unit">%</span></div><div class="ach-tgt">적정 70% 이하</div><div class="ach-bg"><div class="ach-fi" id="rt-capbar" style="width:0%"></div></div><div class="ach-pct" id="rt-cappct" style="color:var(--text3)">–</div></div>
+  </div>
+  <div class="sec-t"><i class="ti ti-rotate" style="font-size:13px;margin-right:4px"></i>KPT 회고</div>
+  <div class="kpt-g">
+    <div class="kpt-c"><div class="kpt-hd"><div class="kpt-bdg" style="background:#E1F5EE;color:#085041">K</div><span class="kpt-nm">Keep</span><span class="kpt-desc">잘 됐으니 계속</span></div><textarea id="rt-k" placeholder="이번 달 효과 있었던 것들&#10;잘 된 영업, 좋았던 루틴..." oninput="rtDeb()"></textarea></div>
+    <div class="kpt-c"><div class="kpt-hd"><div class="kpt-bdg" style="background:#FCEBEB;color:#791F1F">P</div><span class="kpt-nm">Problem</span><span class="kpt-desc">개선이 필요</span></div><textarea id="rt-p" placeholder="아쉬웠던 점, 비효율&#10;놓친 기회, 반복된 실수..." oninput="rtDeb()"></textarea></div>
+    <div class="kpt-c kpt-full"><div class="kpt-hd"><div class="kpt-bdg" style="background:#EEEDFE;color:#3C3489">T</div><span class="kpt-nm">Try</span><span class="kpt-desc">다음 달 시도</span></div><textarea id="rt-t" placeholder="다음 달 새롭게 해볼 것&#10;개선 방향, 실험 전략..." oninput="rtDeb()" style="min-height:64px"></textarea></div>
+  </div>
+  <div class="sec-t"><i class="ti ti-target" style="font-size:13px;margin-right:4px"></i>다음 달 목표</div>
+  <div class="ng">
+    <div class="nb"><div class="nb-l">목표 매출</div><input type="number" id="rt-nrev" placeholder="200" oninput="rtDeb()"></div>
+    <div class="nb"><div class="nb-l">목표 클라이언트</div><input type="number" id="rt-ncli" placeholder="3" oninput="rtDeb()"></div>
+    <div class="nb"><div class="nb-l">집중 서비스</div><select id="rt-nf" onchange="rtDeb()"><option value="">선택...</option><option>SNS 월정액</option><option>광고 기획·집행</option><option>브랜딩 패키지</option><option>콘텐츠 기획</option><option>맘대루 IP</option><option>전체 균형</option></select></div>
+    <div class="nb"><div class="nb-l">목표 콘텐츠</div><input type="number" id="rt-ncon" placeholder="4" oninput="rtDeb()"></div>
+  </div>
+  <div class="pledge-b"><div style="font-size:11px;color:var(--text2);margin-bottom:5px"><i class="ti ti-pencil" style="font-size:13px;margin-right:4px"></i>이달의 한 줄 다짐</div><input id="rt-pledge" type="text" placeholder="다음 달을 한 문장으로..." oninput="rtDeb()"></div>
+  <div class="act-row-rt">
+    <button class="btn btn-primary" onclick="rtSave()" style="display:flex;align-items:center;gap:5px"><i class="ti ti-device-floppy" style="font-size:14px"></i>저장</button>
+    <button class="btn" onclick="rtAI()">AI 전략 제안 ↗</button>
+    <span style="font-size:11px;color:var(--text3);margin-left:auto" id="rt-saved"></span>
+  </div>
+  <div class="rt-div"></div>
+  <div class="sec-t" style="margin-top:0"><i class="ti ti-history" style="font-size:13px;margin-right:4px"></i>이전 회고 기록</div>
+  <div class="hist-list" id="rt-hist"></div>
+</section>
+
+<!-- BILLING -->
+<section class="panel" data-tab="billing">
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-l">발행 대기</div><div class="kpi-v" id="bl-k1" style="color:var(--text2)">0건</div><div class="kpi-s" id="bl-k1s">미발행</div></div>
+    <div class="kpi"><div class="kpi-l">발행 완료</div><div class="kpi-v" id="bl-k2" style="color:var(--amber)">0건</div><div class="kpi-s" id="bl-k2s">입금 대기</div></div>
+    <div class="kpi"><div class="kpi-l">입금 완료</div><div class="kpi-v" id="bl-k3" style="color:var(--teal)">0건</div><div class="kpi-s" id="bl-k3s">이번 시즌</div></div>
+    <div class="kpi"><div class="kpi-l">연체</div><div class="kpi-v" id="bl-k4" style="color:var(--red)">0건</div><div class="kpi-s" id="bl-k4s">없음</div></div>
+  </div>
+  <div class="toolbar">
+    <div style="font-size:12px;color:var(--text2)">Won 클라이언트에서 자동 생성하거나 직접 추가</div>
+    <div style="display:flex;gap:6px">
+      <button class="btn" onclick="autoCreateBills()"><i class="ti ti-wand" style="font-size:13px;margin-right:3px"></i>Won에서 자동 생성</button>
+      <button class="btn btn-primary" onclick="openBillModal()"><i class="ti ti-plus" style="font-size:13px;margin-right:3px"></i>청구서 추가</button>
+    </div>
+  </div>
+  <div class="sec-t" style="margin-top:1rem">납기 캘린더</div>
+  <div class="cal-legend">
+    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#FCEBEB;border:.5px solid #E24B4A"></div>연체</div>
+    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#FAEEDA;border:.5px solid #BA7517"></div>납기 예정</div>
+    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#E1F5EE;border:.5px solid #1D9E75"></div>입금 완료</div>
+    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#EEEDFE;border:.5px solid #534AB7"></div>팔로업 예정일</div>
+  </div>
+  <div class="cal-nav">
+    <button class="cal-nav-btn" onclick="calMove(-1)" aria-label="이전 달">‹</button>
+    <span class="cal-month-lbl" id="cal-month-lbl"></span>
+    <button class="cal-nav-btn" onclick="calMove(1)" aria-label="다음 달">›</button>
+    <button class="btn-sm" onclick="calGoToday()" style="font-size:11px">오늘</button>
+  </div>
+  <div class="cal-grid" id="cal-grid"></div>
+  <div class="cal-detail-panel" id="cal-detail-panel">
+    <div class="cal-detail-date" id="cal-detail-date"></div>
+    <div id="cal-detail-items"></div>
+  </div>
+  <div id="bill-list-wrap"></div>
+</section>
+
+<!-- CLIENT DETAIL PANEL -->
+<div class="det-overlay" id="det-overlay" onclick="closeDetail()"></div>
+<div class="det-panel" id="det-panel">
+  <div class="det-hd">
+    <div>
+      <div class="det-nm" id="det-nm">-</div>
+      <div class="det-tp" id="det-tp"></div>
+    </div>
+    <button class="det-close" onclick="closeDetail()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="det-stage-row" id="det-stages"></div>
+  <div class="det-body">
+    <div class="det-kpis">
+      <div class="det-kpi"><div class="det-kpi-l">계약 금액</div><div class="det-kpi-v" id="det-amt">-</div></div>
+      <div class="det-kpi"><div class="det-kpi-l">시간당 수익</div><div class="det-kpi-v" id="det-rate">-</div></div>
+      <div class="det-kpi"><div class="det-kpi-l">주간 시간</div><div class="det-kpi-v" id="det-hrs">-</div></div>
+    </div>
+    <div class="det-sec">메모</div>
+    <textarea class="det-note" id="det-note" placeholder="담당자, 특이사항, 연락처..." oninput="saveDetailNote()"></textarea>
+    <div class="det-sec">
+      활동 기록
+      <div style="display:flex;gap:5px;flex:1;margin-left:8px">
+        <div class="act-type-row" id="act-type-row">
+          <button class="act-type-btn on" data-at="note" onclick="setActType(this)">메모</button>
+          <button class="act-type-btn" data-at="call" onclick="setActType(this)">통화</button>
+          <button class="act-type-btn" data-at="meeting" onclick="setActType(this)">미팅노트</button>
+          <button class="act-type-btn" data-at="dm" onclick="setActType(this)">DM</button>
+          <button class="act-type-btn" data-at="email" onclick="setActType(this)">이메일</button>
+          <button class="act-type-btn" data-at="proposal" onclick="setActType(this)">제안</button>
+        </div>
+        <div class="act-meeting-form" id="act-meeting-form">
+          <div class="act-mf-row"><span class="act-mf-lbl">참석자</span><input class="act-mf-inp" id="mf-attendees" placeholder="이름, 역할..."></div>
+          <div class="act-mf-row"><span class="act-mf-lbl">안건</span><input class="act-mf-inp" id="mf-agenda" placeholder="주요 안건..."></div>
+          <textarea class="act-mf-ta" id="mf-discussion" placeholder="논의 내용..."></textarea>
+          <div class="act-mf-row"><span class="act-mf-lbl">다음 액션</span><input class="act-mf-inp" id="mf-nextaction" placeholder="다음에 할 일..."></div>
+        </div>
+        <div class="act-input-row" id="act-simple-row">
+          <input class="det-act-in" type="text" id="det-act-in" placeholder="활동 내용 입력..." style="flex:1" onkeydown="if(event.key==='Enter')addAct()">
+          <select class="ch-sel" id="det-act-ch"><option value="">송수신</option></select>
+          <button class="btn btn-primary" style="font-size:11px;padding:4px 10px;flex-shrink:0" onclick="addAct()">추가</button>
+        </div>
+      </div>
+    </div>
+    <div class="act-log" id="det-actlog"></div>
+    <div class="det-actions">
+      <button class="btn btn-primary" id="det-advance" onclick="detAdvance()">다음 단계 →</button>
+      <button class="btn" onclick="detDelete()" style="color:var(--red)">삭제</button>
+    </div>
+    <div class="det-rc-row" id="det-rc-row" style="display:none">
+      <span class="det-rc-lbl">♻️ 재계약 클라이언트</span>
+      <button class="det-rc-btn" id="det-rc-btn" onclick="toggleRecontract()">재계약으로 표시</button>
+    </div
+>    </div>
+  </div>
+    <div id="det-crm-extra"></div>
+</div>
+
+<!-- 변덕레터 -->
+<section class="panel" data-tab="letter">
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-l">총 발행호</div><div class="kpi-v" id="lt-k1" style="color:var(--purple)">0호</div><div class="kpi-s" id="lt-k1s">발행 완료</div></div>
+    <div class="kpi"><div class="kpi-l">최신 구독자</div><div class="kpi-v" id="lt-k2">–</div><div class="kpi-s" id="lt-k2s">명</div></div>
+    <div class="kpi"><div class="kpi-l">평균 오픈율</div><div class="kpi-v" id="lt-k3" style="color:var(--teal)">–</div><div class="kpi-s">발행 완료 기준</div></div>
+    <div class="kpi"><div class="kpi-l">목표까지</div><div class="kpi-v" id="lt-k4">–</div><div class="kpi-s" id="lt-k4s">구독자 목표 대비</div></div>
+  </div>
+  <div class="lt-goal-strip">
+    <i class="ti ti-target" style="font-size:16px;color:var(--text2)"></i>
+    <label>구독자 목표</label>
+    <input type="number" id="lt-goal" value="100" placeholder="100" oninput="renderLetter()">
+    <span style="font-size:12px;color:var(--text2)">명</span>
+    <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="lt-goal-msg"></span>
+  </div>
+  <div class="lt-subhd"><i class="ti ti-plus" style="font-size:14px"></i>새 호 추가</div>
+  <div class="lt-form">
+    <input type="text" id="lt-title" placeholder="이번 호 주제·제목 입력..." style="flex:3">
+    <input type="date" id="lt-date">
+    <select id="lt-status">
+      <option value="draft">초안 중</option>
+      <option value="ready">발행 예정</option>
+      <option value="pub">발행 완료</option>
+    </select>
+    <input type="number" id="lt-subs" placeholder="구독자" min="0">
+    <input type="number" id="lt-open" placeholder="오픈율%" min="0" max="100" step="0.1">
+    <button class="btn btn-primary" onclick="addLetter()" style="white-space:nowrap"><i class="ti ti-plus" style="font-size:13px;margin-right:3px"></i>추가</button>
+  </div>
+  <div class="lt-subhd"><i class="ti ti-list" style="font-size:14px"></i>발행 기록 <span style="font-size:11px;font-weight:400;color:var(--text3);margin-left:4px" id="lt-total"></span></div>
+  <div id="lt-list"></div>
+</section>
+
+<!-- 채널 성장 -->
+<section class="panel" data-tab="channel">
+  <div class="ch-grid" id="ch-kpi-grid"></div>
+  <div class="lt-subhd" style="margin-top:0"><i class="ti ti-chart-line" style="font-size:14px"></i>채널별 팔로워 추이</div>
+  <div class="ch-chart-area"><canvas id="ch-canvas" role="img" aria-label="채널별 팔로워 성장 추이 라인 차트">채널 성장 차트</canvas></div>
+  <div class="lt-subhd"><i class="ti ti-plus" style="font-size:14px"></i>스냅샷 추가 <span style="font-size:11px;font-weight:400;color:var(--text3);margin-left:4px">월별로 한 번씩 기록하면 돼요</span></div>
+  <div class="ch-snap-form">
+    <div><label>날짜</label><input type="date" id="ch-date"></div>
+    <div><label>인스타그램</label><input type="number" id="ch-ig" placeholder="0" min="0"></div>
+    <div><label>변덕레터</label><input type="number" id="ch-lt" placeholder="0" min="0"></div>
+    <div><label>블로그</label><input type="number" id="ch-bl" placeholder="0" min="0"></div>
+    <div><label>유튜브</label><input type="number" id="ch-yt" placeholder="0" min="0"></div>
+    <div><label>쓰레드</label><input type="number" id="ch-th" placeholder="0" min="0"></div>
+    <div style="align-self:flex-end"><button class="btn btn-primary" onclick="addSnapshot()" style="white-space:nowrap;padding:6px 12px;font-size:12px"><i class="ti ti-plus" style="font-size:13px;margin-right:2px"></i>저장</button></div>
+  </div>
+  <div class="lt-subhd"><i class="ti ti-list" style="font-size:14px"></i>기록 목록</div>
+  <div id="ch-hist-wrap"></div>
+</section>
+
+<!-- 유입경로 분석 -->
+<section class="panel" data-tab="source">
+  <div class="toolbar" style="margin-bottom:10px">
+    <div style="font-size:12px;color:var(--text2)">유입경로별 전환율 · 계약금액 · 파이프라인 분석</div>
+    <button class="btn-sm" onclick="switchTab('crm')" style="font-size:11px"><i class="ti ti-users" style="font-size:13px"></i>CRM에서 경로 입력</button>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-l">분석된 클라이언트</div><div class="kpi-v" id="src-k1">0</div><div class="kpi-s">경로 입력 완료</div></div>
+    <div class="kpi"><div class="kpi-l">최고 전환 경로</div><div class="kpi-v" id="src-k2" style="color:var(--teal);font-size:15px">–</div><div class="kpi-s" id="src-k2s"></div></div>
+    <div class="kpi"><div class="kpi-l">평균 전환율</div><div class="kpi-v" id="src-k3">–</div><div class="kpi-s">전체 경로 평균</div></div>
+    <div class="kpi"><div class="kpi-l">미분류</div><div class="kpi-v" id="src-k4" style="color:var(--text2)">0</div><div class="kpi-s">CRM에서 경로 입력 가능</div></div>
+  </div>
+  <div class="sec-t" style="margin-top:0">전환율 비교 (경로별)</div>
+  <div class="src-chart-area"><canvas id="src-canvas" role="img" aria-label="유입경로별 전환율 수평 바 차트">유입경로 전환율 차트</canvas></div>
+  <div class="src-grid" id="src-cards"></div>
+  <div class="ltv-comp-wrap" id="src-ltv-section"></div>
+    <div class="v22-sec">
+      <div class="v22-sec-ttl"><i class="ti ti-filter" style="font-size:12px"></i>파이프라인 전환율 퍼널</div>
+      <div id="crm-funnel"></div>
+    </div>
+    <div class="v22-sec">
+      <div class="v22-sec-ttl"><i class="ti ti-tag" style="font-size:12px"></i>업종 태그별 성과</div>
+      <div id="tag-perf"></div>
+    </div>
+  <div class="sec-t" style="margin-top:1.5rem">재계약률 트래킹</div>
+  <div class="rc-strip" id="rc-strip"></div>
+  <div class="rc-list" id="rc-list"></div>
+  <div class="v22-sec" style="margin-top:1.5rem">
+    <div class="v22-sec-ttl"><i class="ti ti-share" style="font-size:12px"></i>소개 네트워크 — 누가 가장 많이 소개했나?</div>
+    <div id="ref-network-wrap" style="padding:4px 0"><div style="font-size:11px;color:var(--text3)">클라이언트 상세 패널에서 소개자를 설정하면 여기에 기여도 분석이 표시돼요.</div></div>
+  </div>
+  <div id="src-note" style="font-size:11px;color:var(--text3);margin-top:12px">* 유입경로는 CRM 탭 "새 클라이언트" 추가 시 설정하거나, 이전 데이터는 클라이언트 상세 페이지에서 수정할 수 있어요.</div>
+</section>
+
+<!-- 연간 목표 -->
+<section class="panel" data-tab="annual">
+  <div class="yr-strip">
+    <i class="ti ti-target" style="font-size:16px;color:var(--text2)"></i>
+    <div class="yr-strip-item"><label>2026년 매출 목표</label><input type="number" id="yr-rev-goal" value="2400" oninput="renderAnnual()"><span>만원</span></div>
+    <div class="yr-strip-item"><label>목표 Won 클라이언트</label><input type="number" id="yr-cli-goal" value="20" oninput="renderAnnual()"><span>명</span></div>
+    <div class="yr-strip-item"><label>목표 콘텐츠 발행</label><input type="number" id="yr-con-goal" value="50" oninput="renderAnnual()"><span>건</span></div>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-l">연간 달성 예측</div><div class="kpi-v" id="yr-k1">–</div><div class="kpi-s" id="yr-k1s">목표 대비</div></div>
+    <div class="kpi"><div class="kpi-l">현재 누적 실적</div><div class="kpi-v" id="yr-k2" style="color:var(--teal)">0만</div><div class="kpi-s" id="yr-k2s">입력된 달 합계</div></div>
+    <div class="kpi"><div class="kpi-l">남은 목표</div><div class="kpi-v" id="yr-k3">–</div><div class="kpi-s" id="yr-k3s"></div></div>
+    <div class="kpi"><div class="kpi-l">목표 월 매출</div><div class="kpi-v" id="yr-k4">–</div><div class="kpi-s">연간 목표 ÷ 12</div></div>
+  </div>
+  <div class="sec-t" style="margin-top:0">월별 실적 vs 목표</div>
+  <div class="yr-chart-area"><canvas id="yr-canvas" role="img" aria-label="2026년 월별 매출 실적 및 목표 차트">연간 목표 차트</canvas></div>
+  <div class="sec-t">월별 실적 입력 <span style="font-size:11px;font-weight:400;color:var(--text3);margin-left:4px">실제 입금된 매출을 월별로 입력하세요</span></div>
+  <div class="yr-month-grid">
+<div class="yr-month" id="yr-m-0"><div class="yr-mon-lbl" id="yr-ml-0">1월</div><input type="number" id="yr-act-0" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-0" style="width:0%"></div></div></div>
+<div class="yr-month" id="yr-m-1"><div class="yr-mon-lbl" id="yr-ml-1">2월</div><input type="number" id="yr-act-1" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-1" style="width:0%"></div></div></div>
+<div class="yr-month" id="yr-m-2"><div class="yr-mon-lbl" id="yr-ml-2">3월</div><input type="number" id="yr-act-2" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-2" style="width:0%"></div></div></div>
+<div class="yr-month" id="yr-m-3"><div class="yr-mon-lbl" id="yr-ml-3">4월</div><input type="number" id="yr-act-3" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-3" style="width:0%"></div></div></div>
+<div class="yr-month" id="yr-m-4"><div class="yr-mon-lbl" id="yr-ml-4">5월</div><input type="number" id="yr-act-4" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-4" style="width:0%"></div></div></div>
+<div class="yr-month" id="yr-m-5"><div class="yr-mon-lbl" id="yr-ml-5">6월</div><input type="number" id="yr-act-5" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-5" style="width:0%"></div></div></div>
+<div class="yr-month" id="yr-m-6"><div class="yr-mon-lbl" id="yr-ml-6">7월</div><input type="number" id="yr-act-6" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-6" style="width:0%"></div></div></div>
+<div class="yr-month" id="yr-m-7"><div class="yr-mon-lbl" id="yr-ml-7">8월</div><input type="number" id="yr-act-7" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-7" style="width:0%"></div></div></div>
+<div class="yr-month" id="yr-m-8"><div class="yr-mon-lbl" id="yr-ml-8">9월</div><input type="number" id="yr-act-8" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-8" style="width:0%"></div></div></div>
+<div class="yr-month" id="yr-m-9"><div class="yr-mon-lbl" id="yr-ml-9">10월</div><input type="number" id="yr-act-9" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-9" style="width:0%"></div></div></div>
+<div class="yr-month" id="yr-m-10"><div class="yr-mon-lbl" id="yr-ml-10">11월</div><input type="number" id="yr-act-10" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-10" style="width:0%"></div></div></div>
+<div class="yr-month" id="yr-m-11"><div class="yr-mon-lbl" id="yr-ml-11">12월</div><input type="number" id="yr-act-11" placeholder="0" min="0" oninput="renderAnnual()"><div class="yr-mon-bar-bg"><div class="yr-mon-bar-f" id="yr-mb-11" style="width:0%"></div></div></div>
+  </div>
+  <div class="sec-t">다른 지표 비교</div>
+  <div class="yr-compare-grid" id="yr-compare"></div>
+</section>
+
+<!-- 액션 보드 -->
+<section class="panel" data-tab="action">
+  <div class="ab-top">
+    <div class="ab-fbtns">
+      <button class="ab-fb on" data-af="all" onclick="abSetF('all')">전체 (완료 포함)</button>
+      <button class="ab-fb p1" data-af="p1" onclick="abSetF('p1')">🔴 핵심</button>
+      <button class="ab-fb p2" data-af="p2" onclick="abSetF('p2')">🟡 권장</button>
+      <button class="ab-fb p3" data-af="p3" onclick="abSetF('p3')">🟢 나중에</button>
+      <button class="ab-fb" data-af="done" onclick="abSetF('done')">완료</button>
+    </div>
+    <select class="ab-catsel" id="ab-catsel" onchange="renderActions()">
+      <option value="all">전체 카테고리</option>
+      <option value="OS 잔여 기능">OS 잔여 기능</option>
+      <option value="비즈니스 실행">비즈니스 실행</option>
+      <option value="맘대루 콘텐츠">맘대루 콘텐츠</option>
+      <option value="Phase 2 준비">Phase 2 준비</option>
+      <option value="CRM 수업 연계">CRM 수업 연계</option>
+      <option value="기타">기타</option>
+    </select>
+    <div class="ab-pgbar">
+      <div class="ab-pglbl"><span id="ab-plbl">0/0</span><span id="ab-ppct">0%</span></div>
+      <div class="ab-pgbg"><div class="ab-pgf" id="ab-pgf" style="width:0%"></div></div>
+    </div>
+    <button class="ab-addtgl" onclick="abToggleForm()"><i class="ti ti-plus" style="font-size:13px"></i>추가</button>
+  </div>
+  <div class="ab-addform" id="ab-addform">
+    <div class="ab-fgrid">
+      <div class="ab-fgrid-full"><label>액션 제목</label><input type="text" id="ab-f-title" placeholder="할 일을 입력하세요..."></div>
+      <div class="ab-fgrid-full"><label>설명 (선택)</label><input type="text" id="ab-f-desc" placeholder="간략한 설명..."></div>
+      <div><label>카테고리</label>
+        <select id="ab-f-cat">
+          <option value="OS 잔여 기능">OS 잔여 기능</option>
+          <option value="비즈니스 실행">비즈니스 실행</option>
+          <option value="맘대루 콘텐츠">맘대루 콘텐츠</option>
+          <option value="Phase 2 준비">Phase 2 준비</option>
+          <option value="CRM 수업 연계">CRM 수업 연계</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+      <div><label>우선순위</label>
+        <select id="ab-f-pri">
+          <option value="p1">🔴 핵심</option>
+          <option value="p2">🟡 권장</option>
+          <option value="p3">🟢 나중에</option>
+        </select>
+      </div>
+      <div><label>타임라인</label>
+        <select id="ab-f-time">
+          <option value="t1">즉시~9월</option>
+          <option value="t2">9월 이후</option>
+          <option value="t3">여유 있을 때</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addAction()" style="width:100%;font-size:12px;padding:7px">추가</button></div>
+      <div class="ab-fgrid-full"><label>실행 프롬프트 (Claude에게 보낼 내용)</label><textarea id="ab-f-prompt" placeholder="이 액션을 진행할 때 Claude에게 보낼 프롬프트를 미리 작성해두세요..."></textarea></div>
+    </div>
+  </div>
+  <div id="ab-list"></div>
+</section>
+
+<!-- 지출 트래커 -->
+<section class="panel" data-tab="expense">
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-l">이번 달 지출</div><div class="kpi-v" id="exp-k1" style="color:var(--red,#E24B4A)">0만</div><div class="kpi-s" id="exp-k1s">전월 대비</div></div>
+    <div class="kpi"><div class="kpi-l">이번 달 순수익</div><div class="kpi-v" id="exp-k2">–</div><div class="kpi-s" id="exp-k2s">매출 − 지출</div></div>
+    <div class="kpi"><div class="kpi-l">연간 누적 지출</div><div class="kpi-v" id="exp-k3">0만</div><div class="kpi-s">입력된 달 기준</div></div>
+    <div class="kpi"><div class="kpi-l">연간 순수익</div><div class="kpi-v" id="exp-k4">–</div><div class="kpi-s">누적 매출 − 지출</div></div>
+  </div>
+  <div class="tax-strip">
+    <i class="ti ti-calculator" style="font-size:16px;color:var(--text2)"></i>
+    <div class="tax-item">원천징수 3.3% <strong id="exp-tax33">–</strong></div>
+    <div class="tax-item">예상 종합소득세 <strong id="exp-taxest">–</strong></div>
+    <div class="tax-item">세후 순수익 추정 <strong id="exp-aftertax">–</strong></div>
+    <div class="tax-note">* 단순 추정치. 실제 세액은 세무사 확인 권장.</div>
+  </div>
+  <div class="sec-t" style="margin-top:0">매출 · 지출 · 순수익 추이</div>
+  <div class="exp-chart-area"><canvas id="exp-canvas" role="img" aria-label="월별 매출 지출 순수익 차트">지출 차트</canvas></div>
+  <div class="sec-t">카테고리별 지출 입력 <span style="font-size:11px;font-weight:400;color:var(--text3);margin-left:4px">이번 달 셀은 민트색으로 강조됩니다</span></div>
+  <div class="budget-alert" id="exp-budget-alert"></div>
+  <div class="exp-wrap">
+    <table class="exp-table" id="exp-table">
+      <thead><tr>
+        <th class="exp-th-cat">카테고리</th>
+        <th id="exp-th-0">1월</th><th id="exp-th-1">2월</th><th id="exp-th-2">3월</th><th id="exp-th-3">4월</th><th id="exp-th-4">5월</th><th id="exp-th-5">6월</th><th id="exp-th-6">7월</th><th id="exp-th-7">8월</th><th id="exp-th-8">9월</th><th id="exp-th-9">10월</th><th id="exp-th-10">11월</th><th id="exp-th-11">12월</th>
+        <th>연간 합계</th>
+      </tr></thead>
+      <tbody id="exp-tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 관계 티어 -->
+<section class="panel" data-tab="tier">
+  <div class="toolbar" style="margin-bottom:10px">
+    <div style="font-size:12px;color:var(--text2)">팬·독자 관계를 4단계 Tier로 관리하세요</div>
+    <button class="ab-addtgl" onclick="tierToggleForm()"><i class="ti ti-plus" style="font-size:13px"></i>추가</button>
+  </div>
+  <div class="tier-grid"><div class="tier-stat" style="border-left-color:#534AB7"><div class="tier-stat-nm" style="color:#534AB7">T1 슈퍼팬</div><div class="tier-stat-v" id="ts-T1" style="color:#534AB7">0</div><div class="tier-stat-s">실제 DM·댓글·공유 자주 하는 찐팬</div></div><div class="tier-stat" style="border-left-color:#185FA5"><div class="tier-stat-nm" style="color:#185FA5">T2 활성 팬</div><div class="tier-stat-v" id="ts-T2" style="color:#185FA5">0</div><div class="tier-stat-s">반응은 하지만 DM까지는 아닌 팔로워</div></div><div class="tier-stat" style="border-left-color:#3B6D11"><div class="tier-stat-nm" style="color:#3B6D11">T3 잠재 팬</div><div class="tier-stat-v" id="ts-T3" style="color:#3B6D11">0</div><div class="tier-stat-s">가끔 좋아요·저장. 관심 있지만 소극적</div></div><div class="tier-stat" style="border-left-color:#5F5E5A"><div class="tier-stat-nm" style="color:#5F5E5A">T4 일반 팔로워</div><div class="tier-stat-v" id="ts-T4" style="color:#5F5E5A">0</div><div class="tier-stat-s">팔로우 중이지만 상호작용 거의 없음</div></div></div>
+  <div class="tier-add-form" id="tier-add-form">
+    <div class="tier-fgrid">
+      <div class="tier-fgrid-full"><label>이름 / 닉네임</label><input type="text" id="tier-f-nm" placeholder="@닉네임 또는 이름..."></div>
+      <div><label>채널</label>
+        <select id="tier-f-ch">
+          <option value="인스타그램">인스타그램</option>
+          <option value="변덕레터">변덕레터</option>
+          <option value="블로그">블로그</option>
+          <option value="유튜브">유튜브</option>
+          <option value="쓰레드">쓰레드</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+      <div><label>Tier</label>
+        <select id="tier-f-tier">
+          <option value="T1">T1 슈퍼팬</option>
+          <option value="T2">T2 활성 팬</option>
+          <option value="T3" selected>T3 잠재 팬</option>
+          <option value="T4">T4 일반 팔로워</option>
+        </select>
+      </div>
+      <div><label>마지막 상호작용</label><input type="date" id="tier-f-date"></div>
+      <div class="tier-fgrid-full"><label>메모</label><textarea id="tier-f-note" placeholder="DM 내용, 반응한 콘텐츠, 특이사항..."></textarea></div>
+      <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addTierPerson()" style="width:100%;font-size:12px;padding:7px">추가</button></div>
+    </div>
+  </div>
+  <div class="crm-search-bar" style="margin-bottom:10px">
+    <div class="crm-search-wrap">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input class="crm-search-input" id="tier-search" type="search" placeholder="이름·닉네임 검색..." oninput="renderTier()">
+    </div>
+    <div class="crm-filter-row" id="tier-tier-filter">
+      <button class="crm-fb on" data-tv="all" onclick="setTierFilter(this.dataset.tv)">전체</button>
+      <button class="crm-fb" data-tv="T1" onclick="setTierFilter(this.dataset.tv)" style="color:#534AB7">T1</button>
+      <button class="crm-fb" data-tv="T2" onclick="setTierFilter(this.dataset.tv)" style="color:#185FA5">T2</button>
+      <button class="crm-fb" data-tv="T3" onclick="setTierFilter(this.dataset.tv)" style="color:#3B6D11">T3</button>
+      <button class="crm-fb" data-tv="T4" onclick="setTierFilter(this.dataset.tv)">T4</button>
+    </div>
+    <span class="crm-result-msg" id="tier-msg"></span>
+  </div>
+  <div class="tier-list" id="tier-list"></div>
+
+
+<section class="panel" data-tab="quote">
+  <div class="toolbar" style="margin-bottom:12px">
+    <div><div style="font-size:14px;font-weight:700">견적 자동화</div><div style="font-size:11px;color:var(--text2);margin-top:2px">서비스 선택 → 금액 자동 계산 → 카카오·제안서 텍스트 복사</div></div>
+    <button class="qt-reset-btn" onclick="resetQuote()"><i class="ti ti-refresh" style="font-size:11px"></i> 초기화</button>
+  </div>
+  <!-- 3티어 패키지 가격표 -->
+  <div class="qt-pkg-section">
+    <div class="qt-pkg-ttl">&#128230; 패키지로 빠르게 시작하기</div>
+    <div class="qt-pkg-grid">
+      <!-- Lite -->
+      <div class="qt-pkg-card lite">
+        <span class="qt-pkg-badge">LITE</span>
+        <div class="qt-pkg-name">라이트</div>
+        <div class="qt-pkg-sub">브랜딩을 막 시작하는 소형 브랜드</div>
+        <div class="qt-pkg-price">80~100만원</div>
+        <div class="qt-pkg-price-sub">/ 월 (VAT 별도)</div>
+        <ul class="qt-pkg-items">
+          <li>SNS 월정액 · 기본 (카드뉴스 4회)</li>
+          <li>콘텐츠 기획 · 기본 (캘린더+주제 12개)</li>
+          <li>월간 성과 공유</li>
+        </ul>
+        <button class="qt-pkg-cta" data-pkg="lite" onclick="applyPkgQuote(this.dataset.pkg)">이 패키지로 견적 잡기</button>
+      </div>
+      <!-- Standard -->
+      <div class="qt-pkg-card standard">
+        <span class="qt-pkg-badge">STANDARD</span>
+        <div class="qt-pkg-name">스탠다드</div>
+        <div class="qt-pkg-sub">성장기 브랜드 · 가장 많이 선택</div>
+        <div class="qt-pkg-price">180~230만원</div>
+        <div class="qt-pkg-price-sub">/ 프로젝트 (VAT 별도)</div>
+        <ul class="qt-pkg-items">
+          <li>SNS 월정액 · 스탠다드 (카드뉴스 8회+스토리)</li>
+          <li>광고 기획·집행 · 기본 (소재 3종+1개월)</li>
+          <li>콘텐츠 기획 · 스탠다드 (카피+비주얼 가이드)</li>
+          <li>주간 리포트 포함</li>
+        </ul>
+        <button class="qt-pkg-cta" data-pkg="standard" onclick="applyPkgQuote(this.dataset.pkg)">이 패키지로 견적 잡기</button>
+      </div>
+      <!-- Premium -->
+      <div class="qt-pkg-card premium">
+        <span class="qt-pkg-badge">PREMIUM</span>
+        <div class="qt-pkg-name">프리미엄</div>
+        <div class="qt-pkg-sub">풀 서비스 · 멀티채널 통합 운영</div>
+        <div class="qt-pkg-price">350만원~</div>
+        <div class="qt-pkg-price-sub">/ 프로젝트 (VAT 별도)</div>
+        <ul class="qt-pkg-items">
+          <li>SNS 월정액 · 프리미엄 (카드뉴스 12회+릴스)</li>
+          <li>광고 기획·집행 · 프리미엄 (소재 8종+3개월)</li>
+          <li>브랜딩 패키지 · 스탠다드 (로고+가이드+명함)</li>
+          <li>콘텐츠 기획 · 프리미엄 (영상스크립트+릴스)</li>
+        </ul>
+        <button class="qt-pkg-cta" data-pkg="premium" onclick="applyPkgQuote(this.dataset.pkg)">이 패키지로 견적 잡기</button>
+      </div>
+    </div>
+    <div class="qt-pkg-divider">또는 서비스를 직접 선택하세요</div>
+  </div>
+
+  <div class="qt-layout">
+    <div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:7px;color:var(--text2)">서비스 추가 (클릭)</div>
+      <div class="qt-svc-grid" id="qt-svc-grid"><div style="font-size:11px;color:var(--text2);padding:8px 0">로딩 중...</div></div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:7px;color:var(--text2)">선택된 서비스</div>
+      <div id="qt-items"><div class="qt-empty-msg">위에서 서비스를 클릭해 추가하세요</div></div>
+    </div>
+    <div>
+      <div class="qt-panel">
+        <div class="qt-panel-ttl"><i class="ti ti-receipt" style="font-size:13px"></i>견적 요약</div>
+        <div class="qt-client-row"><select class="qt-client-sel" id="qt-client-sel" onchange="qtSetClient(this.value)"><option value="">클라이언트 연결 (선택)</option></select></div>
+        <div id="qt-total-list"></div>
+        <div class="qt-total-sum"><span class="qt-total-sum-lbl">합계</span><span class="qt-total-sum-val" id="qt-sum">0원</span></div>
+        <div class="qt-vat-row"><span class="qt-vat-lbl">VAT 10% 포함 시</span><span class="qt-vat-val" id="qt-vat">0원</span></div>
+        <textarea class="qt-memo" id="qt-memo" rows="2" placeholder="추가 메모 (ex. 착수금 50% 선입금 조건...)" oninput="renderQuoteOutput()"></textarea>
+        <div class="qt-out-tabs">
+          <button class="qt-out-tab on" data-fmt="kakao" onclick="qtSetFmt(this.dataset.fmt)">카카오톡 버전</button>
+          <button class="qt-out-tab" data-fmt="formal" onclick="qtSetFmt(this.dataset.fmt)">제안서 버전</button>
+        </div>
+        <div class="qt-out-box" id="qt-out-box">서비스를 추가하면 여기에 텍스트가 생성돼요.</div>
+        <button class="qt-copy-btn" onclick="copyQuote()"><i class="ti ti-copy" style="font-size:12px"></i> 텍스트 복사</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" data-tab="partner">
+  <div class="toolbar" style="margin-bottom:12px">
+    <div><div style="font-size:14px;font-weight:700">외주 파트너</div><div style="font-size:11px;color:var(--text2);margin-top:2px">디자이너·영상·카피 등 협업 파트너 관리</div></div>
+    <button class="btn btn-primary" onclick="openPartnerForm(null)" style="font-size:13px;padding:8px 16px"><i class="ti ti-plus" style="font-size:13px"></i> 파트너 추가</button>
+  </div>
+  <div class="pt-form" id="pt-form" style="display:none">
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px" id="pt-form-ttl">파트너 추가</div>
+    <div class="pt-form-grid">
+      <div class="pt-form-row"><label class="pt-form-lbl">이름 *</label><input id="pt-f-name" placeholder="김지수 디자이너"></div>
+      <div class="pt-form-row"><label class="pt-form-lbl">역할</label><select id="pt-f-role"></select></div>
+      <div class="pt-form-row"><label class="pt-form-lbl">연락처</label><input id="pt-f-contact" placeholder="@계정 또는 연락처"></div>
+      <div class="pt-form-row"><label class="pt-form-lbl">단가</label><input id="pt-f-rate" placeholder="건당 8만원"></div>
+      <div class="pt-form-row"><label class="pt-form-lbl">상태</label><select id="pt-f-status"></select></div>
+    </div>
+    <div class="pt-form-row" style="margin-bottom:8px"><label class="pt-form-lbl">메모</label><textarea id="pt-f-note" rows="2" placeholder="전문 분야, 스타일, 주의사항 등"></textarea></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="savePartner()" style="font-size:12px">저장</button>
+      <button class="btn" onclick="closePartnerForm()" style="font-size:12px">취소</button>
+    </div>
+  </div>
+  
+  <div class="pc-wrap">
+    <div class="pc-hd"><i class="ti ti-calculator" style="font-size:12px"></i>파트너 단가 & 마진 계산기</div>
+    <div class="pc-grid">
+      <div class="pc-field"><label class="pc-lbl">클라이언트 프로젝트</label><select class="pc-in" id="pc-client" onchange="calcPartnerMargin()"><option value="">선택</option></select></div>
+      <div class="pc-field"><label class="pc-lbl">파트너</label><select class="pc-in" id="pc-partner" onchange="calcPartnerMargin()"><option value="">선택</option></select></div>
+      <div class="pc-field"><label class="pc-lbl">파트너 비용 (만원)</label><input class="pc-in" id="pc-cost" type="number" placeholder="8" oninput="calcPartnerMargin()"></div>
+      <div class="pc-field"><label class="pc-lbl">예상 작업 시간 (h)</label><input class="pc-in" id="pc-hours" type="number" placeholder="10" oninput="calcPartnerMargin()"></div>
+    </div>
+    <div class="pc-result" id="pc-result" style="display:none">
+      <div class="pc-rv"><div class="pc-rv-v" id="pc-margin-pct" style="color:var(--teal)">-</div><div class="pc-rv-l">마진율</div></div>
+      <div class="pc-rv"><div class="pc-rv-v" id="pc-profit">-</div><div class="pc-rv-l">순이익 (만)</div></div>
+      <div class="pc-rv"><div class="pc-rv-v" id="pc-hourly">-</div><div class="pc-rv-l">시간당 순익 (만)</div></div>
+    </div>
+  </div><div id="pt-list"></div>
+</section>
+
+<section class="panel" data-tab="memo">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div style="font-size:14px;font-weight:700">&#128221; 메모장</div>
+    <button class="btn btn-primary" onclick="newMemo()" style="font-size:12px">+ 새 메모</button>
+  </div>
+  <div class="memo-wrap">
+    <div class="memo-list-col" style="border-right:.5px solid var(--border);padding-right:12px">
+      <div id="memo-list"><div style="text-align:center;color:var(--text3);font-size:11px;padding:20px 0">메모가 없어요<br><button class="btn btn-primary" onclick="newMemo()" style="margin-top:8px;font-size:11px">+ 첫 메모 작성</button></div></div>
+    </div>
+    <div class="memo-editor" id="memo-editor">
+      <div id="memo-empty" style="text-align:center;color:var(--text3);font-size:12px;padding:40px 0">
+        <div style="font-size:32px;margin-bottom:10px">&#128221;</div>
+        왼쪽에서 메모를 선택하거나<br>새 메모를 작성하세요
+      </div>
+      <div id="memo-edit-area" style="display:none">
+        <div class="memo-tag-row" id="memo-tag-row" style="margin-bottom:8px"></div>
+        <input class="memo-title-in" id="memo-title" placeholder="제목" oninput="saveMemoDebounce()">
+        <textarea class="memo-body-in" id="memo-body" placeholder="내용을 입력하세요..." oninput="saveMemoDebounce()"></textarea>
+        <div style="display:flex;justify-content:flex-end;gap:6px;margin-top:6px">
+          <button class="btn" onclick="deleteMemo()" style="font-size:11px;color:var(--text3)">삭제</button>
+          <span id="memo-saved" style="font-size:10px;color:var(--text3);line-height:2.2"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 표준 제안서 모달 b4 -->
+<div class="prop-modal-overlay" id="prop-modal-overlay" onclick="if(event.target===this)closePropModal()">
+  <div class="prop-modal">
+    <div class="prop-modal-hd">&#128196; 서비스 제안서 생성</div>
+    <div class="pt-form-grid">
+      <div class="prop-frow"><label class="prop-flbl">클라이언트명</label><input id="pm-client" placeholder="해피쿡 분식"></div>
+      <div class="prop-frow"><label class="prop-flbl">서비스</label><select id="pm-svc"></select></div>
+      <div class="prop-frow"><label class="prop-flbl">금액 (만원)</label><input id="pm-amt" type="number"></div>
+      <div class="prop-frow"><label class="prop-flbl">계약 기간</label><input id="pm-period" placeholder="3개월"></div>
+    </div>
+    <div class="prop-frow"><label class="prop-flbl">제안 배경 / 현재 문제점</label><textarea id="pm-bg" rows="2" placeholder="예: 현재 SNS 계정은 있으나 콘텐츠 일관성이 없고 업로드가 불규칙합니다."></textarea></div>
+    <div class="prop-frow"><label class="prop-flbl">기대 효과</label><textarea id="pm-effect" rows="2" placeholder="예: 월 2회 이상 인게이지먼트 향상, 팔로워 20% 성장 목표"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-primary" onclick="generateProposal()" style="font-size:12px">제안서 생성</button>
+      <button class="btn" onclick="closePropModal()" style="font-size:12px">닫기</button>
+    </div>
+    <div class="prop-out" id="pm-output" style="display:none"></div>
+    <div class="prop-modal-fts" id="pm-fts" style="display:none">
+      <button class="btn btn-primary" onclick="copyProposal()" style="font-size:12px">&#128203; 복사</button>
+    </div>
+  </div>
+</div>
+
+<!-- 1-tap 퀵 로그 -->
+<div class="ql-panel" id="ql-panel">
+  <div class="ql-nm" id="ql-nm"></div>
+  <select class="ql-sel" id="ql-ch"><option value="">송수신 선택</option></select>
+  <input class="ql-in" id="ql-txt" placeholder="활동 내용..." onkeydown="if(event.key==='Enter')submitQuickLog()">
+  <div class="ql-btns">
+    <button class="ql-save" onclick="submitQuickLog()">✅ 기록</button>
+    <button class="ql-cancel" onclick="closeQuickLog()">×</button>
+  </div>
+</div>
+
+<!-- v30 설정 모달 -->
+<div class="settings-modal" id="settings-modal" style="display:none" onclick="if(event.target===this)closeSettings()">
+  <div class="settings-box">
+    <div class="settings-hd">
+      <span>&#9881;&#65039; 설정</span>
+      <button onclick="closeSettings()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text2)">&#10005;</button>
+    </div>
+    <div class="settings-body">
+      <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:10px">&#128179; 입금 계좌 정보 (카카오 발송 자동 사용)</div>
+      <div class="settings-field"><div class="settings-lbl">은행명</div>
+        <input class="settings-in" id="st-bank-name" placeholder="우리은행"></div>
+      <div class="settings-field"><div class="settings-lbl">계좌번호</div>
+        <input class="settings-in" id="st-bank-acct" placeholder="000-0000-0000"></div>
+      <div class="settings-field"><div class="settings-lbl">예금주</div>
+        <input class="settings-in" id="st-bank-holder" placeholder="조형준"></div>
+      <div style="font-size:11px;font-weight:700;color:var(--text2);margin:14px 0 10px">&#128197; Google Calendar (GAS URL)</div>
+      <div class="settings-field"><div class="settings-lbl">Google Apps Script 배포 URL (선택)</div>
+        <input class="settings-in" id="st-gas-url" placeholder="https://script.google.com/macros/s/.../exec"></div>
+      <div style="font-size:11px;font-weight:700;color:var(--text2);margin:14px 0 10px">&#128200; 월간 매출 목표</div>
+      <div class="settings-field"><div class="settings-lbl">이번 달 목표 (만원)</div>
+        <input class="settings-in" id="st-rv-target" type="number" placeholder="200"></div>
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button class="btn btn-primary" onclick="saveSettings()" style="flex:1">저장</button>
+        <button class="btn" onclick="closeSettings()">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- v30 AI 분석 모달 -->
+<div class="ai-modal" id="ai-modal" style="display:none" onclick="if(event.target===this)closeAiModal()">
+  <div class="ai-modal-box">
+    <div class="ai-modal-hd">
+      <div class="ai-modal-title">&#129302; AI 클라이언트 분석 프롬프트</div>
+      <button onclick="closeAiModal()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text2)">&#10005;</button>
+    </div>
+    <div class="ai-modal-body">
+      <div style="font-size:11px;color:var(--text2);margin-bottom:10px">아래 프롬프트를 복사해서 Claude.ai에 붙여넣으세요. 클라이언트 분석 & 전략을 바로 받을 수 있어요.</div>
+      <div class="ai-prompt-box" id="ai-prompt-content">생성 중...</div>
+    </div>
+    <div class="ai-modal-ft">
+      <button class="btn btn-primary" onclick="copyAiPrompt()" style="flex:1">&#128203; 복사</button>
+      <a id="ai-claude-link" href="https://claude.ai" target="_blank" rel="noopener" class="btn" style="text-decoration:none;text-align:center">Claude.ai에서 열기 &#8599;</a>
+      <button class="btn" onclick="closeAiModal()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- v32 전역 검색 -->
+<div class="gs-overlay" id="gs-overlay" style="display:none" onclick="if(event.target===this)closeSearch()">
+  <div class="gs-box">
+    <div class="gs-input-row">
+      <i class="ti ti-search" style="color:var(--text3);font-size:16px;flex-shrink:0"></i>
+      <input class="gs-input" id="gs-input" placeholder="클라이언트, 메모, 청구서 검색..." oninput="runSearch()" onkeydown="searchKeyNav(event)" autocomplete="off">
+      <span style="font-size:10px;color:var(--text3)">ESC</span>
+    </div>
+    <div class="gs-results" id="gs-results"></div>
+    <div class="gs-hint"><span>&#9650;&#9660; 이동</span><span>&#9166; 선택</span><span>ESC 닫기</span></div>
+  </div>
+</div>
+
+<!-- v32 스냅샷 모달 -->
+<div class="snap-modal" id="snap-modal" style="display:none" onclick="if(event.target===this)closeSnapModal()">
+  <div class="snap-box">
+    <div class="snap-hd">
+      <span>&#128190; 데이터 복원</span>
+      <button onclick="closeSnapModal()" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">&#10005;</button>
+    </div>
+    <div id="snap-list" style="max-height:320px;overflow-y:auto"></div>
+    <div style="padding:10px 14px;border-top:.5px solid var(--border);font-size:10px;color:var(--text3)">최근 7일 자동 스냅샷. 복원 시 현재 데이터를 덮어씁니다.</div>
+  </div>
+</div>
+
+<!-- Lost 사유 모달 -->
+<div class="lost-modal-ov" id="lost-modal-ov" onclick="if(event.target===this)closeLostModal()">
+  <div class="lost-modal">
+    <div class="lost-modal-hd">&#10060; 이탈 사유 기록</div>
+    <select class="lost-sel" id="lost-reason-sel"><option value="">사유 선택 (선택)</option></select>
+    <textarea class="lost-note" id="lost-reason-note" rows="2" placeholder="추가 메모"></textarea>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn" onclick="closeLostModal()" style="font-size:12px">건너뛰기</button>
+      <button class="btn btn-primary" onclick="saveLostReason()" style="font-size:12px">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 키보드 단축키 도움말 -->
+<div class="kb-overlay" id="kb-overlay" onclick="if(event.target===this)closeKbHelp()">
+  <div class="kb-box">
+    <div class="kb-hd">&#9109; 단축키 <button class="btn" onclick="closeKbHelp()" style="font-size:11px;padding:2px 8px">닫기</button></div>
+    <div class="kb-grid">
+      <div class="kb-row"><span class="kb-key">N</span><span class="kb-desc">새 클라이언트</span></div>
+      <div class="kb-row"><span class="kb-key">D</span><span class="kb-desc">다크모드 전환</span></div>
+      <div class="kb-row"><span class="kb-key">?</span><span class="kb-desc">단축키 도움말</span></div>
+      <div class="kb-row"><span class="kb-key">Esc</span><span class="kb-desc">모달 닫기</span></div>
+      <div class="kb-row"><span class="kb-key">1</span><span class="kb-desc">홈</span></div>
+      <div class="kb-row"><span class="kb-key">2</span><span class="kb-desc">파이프라인</span></div>
+      <div class="kb-row"><span class="kb-key">3</span><span class="kb-desc">Capacity</span></div>
+      <div class="kb-row"><span class="kb-key">4</span><span class="kb-desc">수익 예측</span></div>
+      <div class="kb-row"><span class="kb-key">5</span><span class="kb-desc">수익성</span></div>
+      <div class="kb-row"><span class="kb-key">6</span><span class="kb-desc">콘텐츠</span></div>
+      <div class="kb-row"><span class="kb-key">7</span><span class="kb-desc">회고</span></div>
+      <div class="kb-row"><span class="kb-key">8</span><span class="kb-desc">청구서</span></div>
+      <div class="kb-row"><span class="kb-key">9</span><span class="kb-desc">변덕레터</span></div>
+      <div class="kb-row"><span class="kb-key">0</span><span class="kb-desc">견적 자동화</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 종료 체크리스트 모달 -->
+<div class="closure-overlay" id="closure-overlay" onclick="if(event.target===this)closeClosureModal()">
+  <div class="closure-modal">
+    <div class="closure-hd" id="closure-client-nm">&#127881; 계약 완료!</div>
+    <div class="closure-sub">납품 완료 후 할 일을 체크해요.</div>
+    <div class="closure-prog" id="closure-prog"></div>
+    <div class="closure-items" id="closure-items"></div>
+    <div class="closure-fts">
+      <button class="btn" onclick="closeClosureModal()" style="font-size:12px">나중에</button>
+      <button class="btn btn-primary" onclick="saveClosureAndClose()" style="font-size:12px">저장하기</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Sheets 설정 모달 -->
+<div class="sheets-modal-overlay" id="sheets-overlay" onclick="if(event.target===this)closeSheetsModal()">
+  <div class="sheets-modal">
+    <div class="sheets-modal-hd">
+      <i class="ti ti-table" style="font-size:16px;color:#1D9E75" aria-hidden="true"></i>
+      <span class="sheets-modal-ttl">Google Sheets 연결 설정</span>
+      <button class="sheets-modal-close" onclick="closeSheetsModal()" aria-label="닫기">✕</button>
+    </div>
+    <div class="sheets-step"><span class="sheets-step-n">1</span>Google Sheets 새 파일 만들기 → <code>확장 프로그램</code> → <code>Apps Script</code> 클릭</div>
+    <div class="sheets-step"><span class="sheets-step-n">2</span>Apps Script 편집기에 <code>변덕쟁이들_AppsScript.gs</code> 코드 전체 붙여넣기 → 저장(Ctrl+S)</div>
+    <div class="sheets-step"><span class="sheets-step-n">3</span><code>배포</code> → <code>새 배포</code> → 유형: <code>웹 앱</code> → 실행: <code>나</code> / 액세스: <code>모든 사용자</code> → 배포</div>
+    <div class="sheets-step"><span class="sheets-step-n">4</span>배포 후 표시되는 <strong>웹 앱 URL</strong>을 아래에 붙여넣기</div>
+    <div class="sheets-url-wrap">
+      <label>웹 앱 URL</label>
+      <input class="sheets-url-inp" id="sheets-url-inp" type="url" placeholder="https://script.google.com/macros/s/.../exec">
+    </div>
+    <div class="sheets-actions">
+      <button class="btn" onclick="testSheetsConnection()" id="sheets-test-btn">연결 테스트</button>
+      <button class="btn btn-primary" onclick="saveSheetsConfig()" style="flex:1">저장</button>
+    </div>
+    <div class="sheets-last" id="sheets-modal-status"></div>
+  </div>
+</div>
+<div id="toast-container"></div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3>새 클라이언트</h3>
+    <div class="field"><label>상호명 *</label><input type="text" id="f-name" placeholder="예: 해피쿡 분식"></div>
+    <div class="field"><label>서비스 유형 *</label><select id="f-type"><option value="0">SNS 월정액 — 6h/주, 기본 30만</option><option value="1">광고 기획·집행 — 10h/주, 기본 100만</option><option value="2">브랜딩 패키지 — 8h/주, 기본 120만</option><option value="3">콘텐츠 기획 — 5h/주, 기본 50만</option><option value="4">단발 프로젝트 — 3h/주, 기본 30만</option></select></div>
+    <div class="field"><label>금액 (만원)</label><input type="number" id="f-amt" placeholder="자동 입력" min="0"></div>
+    <div class="field"><label>파이프라인 단계</label><select id="f-stage"><option value="lead">🌱 Lead</option><option value="discovery">💬 Discovery</option><option value="proposal">📄 Proposal</option><option value="negotiation">🤝 Negotiation</option><option value="won">✅ Closed Won</option><option value="lost">❌ Closed Lost</option></select></div>
+    <div class="field"><label>유입 경로</label>
+      <select id="f-source">
+        <option value="">선택 안 함</option>
+        <option value="kmong">크몽 (Kmong)</option>
+        <option value="referral">지인 소개</option>
+        <option value="sns">SNS (인스타·블로그)</option>
+        <option value="direct">직접 연락</option>
+        <option value="newsletter">뉴스레터</option>
+        <option value="etc">기타</option>
+      </select>
+    </div>
+    <div class="field"><label>소개자 (선택)</label><select id="f-referrer"><option value="">없음 / 직접 유입</option></select></div>
+    <div class="field"><label>메모 (선택)</label><textarea id="f-note" placeholder="담당자, 연락처, 메모..."></textarea></div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">취소</button><button class="btn btn-primary" onclick="addClient()">추가</button></div>
+  </div>
+</div>
+
+<!-- 청구서 추가 모달 -->
+<div class="modal-overlay" id="bill-modal-overlay" onclick="closeBillModal()" style="display:none"></div>
+<div class="modal" id="bill-modal" style="display:none;max-width:420px">
+  <div class="modal-hd">
+    <span id="bill-modal-title">청구서 추가</span>
+    <button class="modal-close" onclick="closeBillModal()">&#10005;</button>
+  </div>
+  <div class="field">
+    <label>클라이언트</label>
+    <select id="bf-client">
+      <option value="">직접 입력</option>
+    </select>
+  </div>
+  <div class="field" id="bf-name-wrap">
+    <label>이름 직접 입력</label>
+    <input id="bf-name" placeholder="클라이언트 이름" autocomplete="off">
+  </div>
+  <div class="field">
+    <label>서비스 내용 <span style="color:var(--text3);font-size:10px">청구서·카톡 문자에 표시됨</span></label>
+    <input id="bf-desc" placeholder="예: SNS 운영 5월분, 브랜딩 기획안 2차" autocomplete="off">
+  </div>
+  <div style="display:flex;gap:10px">
+    <div class="field" style="flex:1">
+      <label>금액 (만원)</label>
+      <input id="bf-amt" type="number" min="1" placeholder="30">
+    </div>
+    <div class="field" style="flex:1">
+      <label>부가세</label>
+      <select id="bf-vat">
+        <option value="0">미포함</option>
+        <option value="10">포함 (10%)</option>
+        <option value="separate">별도 청구</option>
+      </select>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px">
+    <div class="field" style="flex:1">
+      <label>발행일</label>
+      <input id="bf-issue" type="date">
+    </div>
+    <div class="field" style="flex:1">
+      <label>납기일</label>
+      <input id="bf-due" type="date">
+    </div>
+  </div>
+  <div class="field">
+    <label>메모 (선택)</label>
+    <textarea id="bf-note" placeholder="내부 메모, 특이사항..." rows="2" style="resize:vertical"></textarea>
+  </div>
+  <div class="modal-actions">
+    <button class="btn" onclick="closeBillModal()">취소</button>
+    <button class="btn btn-primary" onclick="submitBillModal()">청구서 생성</button>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
