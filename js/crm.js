@@ -453,6 +453,7 @@ function renderCrmExtra(cl){
   const ltv=getClientLTV(cl);
   const contracts=cl.contracts||[];
   const tags=cl.tags||[];
+  let html='';
   // AI 분석 버튼
   html+='<div style="margin-bottom:10px">';
   html+='<button class="ai-analyze-btn" data-cid="'+cl.id+'" onclick="openAiModal(this.dataset.cid)">&#129302; AI 전략 생성</button>';
@@ -528,7 +529,7 @@ function renderCrmExtra(cl){
     html+='<button class="btn btn-primary" data-cid="'+cl.id+'" onclick="saveReactivateDate(this.dataset.cid)" style="font-size:11px;padding:4px 10px">저장</button></div></div>';
   }
   // 태그 섹션
-  let html='<div class="det-crm-sec collapsed">';
+  html+='<div class="det-crm-sec collapsed">';
   html+='<div class="det-crm-ttl" onclick="toggleCrmSec(this)"><i class="ti ti-tag" style="font-size:13px" aria-hidden="true"></i>클라이언트 태그</div>';
   html+='<div class="tag-edit-wrap">';
   html+=PRESET_TAGS.map(function(pt){
