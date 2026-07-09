@@ -6,12 +6,43 @@
 
 ```
 byunduk_OS/
-├── index.html                  # 메인 HTML (구조 + CSS/JS 연결)
+├── index.html                     # 메인 HTML (구조 + CSS/JS 연결)
 ├── css/
-│   └── style.css               # 스타일(디자인)
+│   ├── base.css                   # 공통 스타일 (색상 변수, 리셋, 레이아웃 기본)
+│   ├── home.css                   # 홈 대시보드
+│   ├── detail-billing.css         # 클라이언트 상세 패널 + 청구서
+│   ├── letter.css                 # 변덕레터
+│   ├── growth-analytics.css       # 채널 성장
+│   ├── action-board.css           # 액션 보드
+│   ├── crm-search-expenses.css    # CRM 검색/필터 + 지출
+│   ├── crm-relationship.css       # 관계 티어(CRM)
+│   ├── quote.css                  # 견적 자동화
+│   ├── forecast-analytics.css     # 수익 예측 · 수익성 분석 등 리포트
+│   ├── responsive-deadline.css    # 모바일 반응형 + 마감/필터 UI
+│   ├── crm-extras.css             # CRM 상세 확장 기능(타임로그, 제안서, 종료 체크 등)
+│   └── reports-partners.css       # LTV 비교, SOP 트래커, 파이프라인 속도, 외주 파트너 탭
 ├── js/
-│   └── app.js                  # 자바스크립트(기능/동작)
-└── 변덕쟁이들_OS_v34c.html      # 원본 백업 (분리 전 통짜 파일, 참고용으로 보존)
+│   ├── core.js                    # 공용 데이터 (전역 상태, 상수)
+│   ├── shared.js                  # 공통 유틸 함수 (저장, 탭 전환, 테마, 토스트, 검색 등)
+│   ├── home.js                    # 홈 탭
+│   ├── crm.js                     # 파이프라인(CRM) 탭
+│   ├── capacity.js                # Capacity 탭
+│   ├── forecast.js                # 수익 예측 탭
+│   ├── profitability.js           # 수익성 분석 탭
+│   ├── ideas-retro.js             # 콘텐츠 보관함 + 월간 회고 탭
+│   ├── billing.js                 # 청구서 탭
+│   ├── letter.js                  # 변덕레터 탭
+│   ├── channel.js                 # 채널 성장 탭
+│   ├── source.js                  # 유입경로 탭
+│   ├── goals-actionboard.js       # 연간 목표 + 액션 보드 탭
+│   ├── expenses-tiers.js          # 지출 + 관계 티어 탭
+│   ├── quote.js                   # 견적 자동화 탭
+│   ├── memos.js                   # 메모장 탭
+│   ├── partners.js                # 외주 파트너 탭
+│   ├── analytics.js               # Google Sheets 연동 + 리포트 분석(서비스 믹스, 정확도, 마감 소요시간)
+│   └── init.js                    # 초기화/부트스트랩 (앱 시작 시 실행)
+├── README.md                      # 이 문서
+└── 변덕쟁이들_OS_v34c.html         # 원본 백업 (분리 전 통짜 파일, 참고용 보존)
 ```
 
 ## 실행 방법
@@ -28,14 +59,15 @@ byunduk_OS/
 
 두 가지 모두 CDN으로 불러오므로 인터넷 연결이 필요합니다. 인터넷이 없으면 아이콘과 차트만 표시되지 않고, 나머지 기능은 정상적으로 동작합니다.
 
-## 리팩토링 노트
+## 리팩토링 히스토리
 
-원래 하나의 통짜 HTML 파일(약 7,674줄)이었던 것을 HTML / CSS / JS 3개 파일로 분리했습니다. 동작은 100% 동일하게 유지됩니다.
+이 프로젝트는 지금까지 두 차례 리팩토링을 거쳤습니다.
 
-향후 개선 여지:
+1. **1차**: 최초 통짜 HTML 파일(약 7,674줄)을 `index.html` / `css/` / `js/` 3개로 분리.
+2. **2차 (현재 구조)**: 이후 CSS와 JS를 각각 기능별 파일로 세분화. 각 탭/기능이 자신만의 css·js 파일을 갖도록 정리했습니다.
 
-- 인라인 이벤트 핸들러(`onclick` 등)를 `addEventListener` 방식으로 전환
-- CSS/JS를 기능별로 더 세분화
-- 인라인 `style` 정리
+앞으로 새 기능을 추가할 때는 해당 기능의 css/js 파일에 추가하면 됩니다. `index.html`의 스크립트 로드 순서(`core.js` → `shared.js` → 기능별 파일들 → `init.js`)는 반드시 유지해야 합니다 — 순서를 바꾸면 오류가 날 수 있습니다.
 
-원본 백업 파일(`변덕쟁이들_OS_v34c.html`)은 안전을 위해 남겨두었습니다. 원하면 나중에 삭제해도 됩니다.
+## 알려진 이슈
+
+- **외주 파트너 탭이 비어 보이는 현상**: 원본 파일에서도 동일하게 발생하던 문제로, 이번 리팩토링으로 새로 생긴 것이 아닙니다.
