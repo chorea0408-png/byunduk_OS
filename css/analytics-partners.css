@@ -85,3 +85,21 @@
 .ins-bdg.d-month{background:#E1F5EE;color:#1D9E75}
 .con-end-badge{font-size:10px;padding:1px 5px;border-radius:99px;margin-left:5px;font-weight:600}
 .ins-sec-lbl{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+/* --- ins card dark-mode fix: these cards use fixed light tint backgrounds (unchanged from original design)
+   but .ins-ttl/.ins-sub inherit the theme text color, which turns near-white in dark mode and becomes
+   unreadable against the still-light tint. Darken the tints (and rebalance badge text) in dark mode only,
+   mirroring the html.force-dark / prefers-color-scheme:dark pattern already used in base.css. --- */
+@media(prefers-color-scheme:dark){
+  html:not(.force-light) .ins-card.renewal{background:#412402}
+  html:not(.force-light) .ins-card.upsell{background:#062633}
+  html:not(.force-light) .ins-card.overdue{background:#501313}
+  html:not(.force-light) .ins-bdg.d-over{background:#501313;color:#FCA5A5}
+  html:not(.force-light) .ins-bdg.d-week{background:#412402;color:#FBBF24}
+  html:not(.force-light) .ins-bdg.d-month{background:#04342C;color:#6EE7B7}
+}
+html.force-dark .ins-card.renewal{background:#412402}
+html.force-dark .ins-card.upsell{background:#062633}
+html.force-dark .ins-card.overdue{background:#501313}
+html.force-dark .ins-bdg.d-over{background:#501313;color:#FCA5A5}
+html.force-dark .ins-bdg.d-week{background:#412402;color:#FBBF24}
+html.force-dark .ins-bdg.d-month{background:#04342C;color:#6EE7B7}

@@ -75,11 +75,20 @@
 .ai-pred-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .ai-pred-card{border-radius:var(--radius-md);padding:10px 11px;text-align:center}
 .ai-pred-card.opt{background:#E1F5EE;border:.5px solid #1D9E75}
-.ai-pred-card.neu{background:#F1EFE8;border:.5px solid var(--border)}
+.ai-pred-card.neu{background:var(--bg2);border:.5px solid var(--border)}
 .ai-pred-card.pes{background:#FCEBEB;border:.5px solid #E24B4A}
 .ai-pred-lbl{font-size:10px;font-weight:600;margin-bottom:4px}
 .ai-pred-v{font-size:16px;font-weight:700}
 .ai-pred-s{font-size:10px;color:var(--text2);margin-top:2px}
+/* dark-mode fix: .opt/.pes use fixed light tints (unchanged from original design); darken them so the
+   inherited theme text (.ai-pred-s, and untinted .ai-pred-v in the neutral card) stays legible, mirroring
+   the same html.force-dark / prefers-color-scheme:dark pattern used elsewhere for this issue. */
+@media(prefers-color-scheme:dark){
+  html:not(.force-light) .ai-pred-card.opt{background:#04342C}
+  html:not(.force-light) .ai-pred-card.pes{background:#501313}
+}
+html.force-dark .ai-pred-card.opt{background:#04342C}
+html.force-dark .ai-pred-card.pes{background:#501313}
 .ai-reasoning{font-size:11px;color:var(--text2);line-height:1.7;background:var(--bg2);border-radius:var(--radius-md);padding:9px 11px;margin-bottom:10px}
 .ai-prompt-box{font-size:11px;white-space:pre-wrap;background:var(--bg2);border:.5px solid var(--border);border-radius:var(--radius-md);padding:10px;max-height:200px;overflow-y:auto;color:var(--text3);font-family:inherit;line-height:1.6;display:none}
 .ai-prompt-toggle{font-size:11px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:4px;margin-bottom:6px}
@@ -126,6 +135,13 @@
 .closure-item{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;border-radius:var(--radius-md);background:var(--bg2);cursor:pointer;user-select:none;transition:all .15s}
 .closure-item:hover{background:var(--bg3)}
 .closure-item.done{background:#E1F5EE;border:.5px solid #1D9E75}
+/* dark-mode fix: fixed light tint bg + inherited .closure-item-sub text color goes unreadable in dark mode (same issue as .ins-card / .ai-pred-card above) */
+@media(prefers-color-scheme:dark){
+  html:not(.force-light) .closure-item.done{background:#04342C}
+  html:not(.force-light) .closure-item.done .closure-item-ttl{color:var(--teal-d)}
+}
+html.force-dark .closure-item.done{background:#04342C}
+html.force-dark .closure-item.done .closure-item-ttl{color:var(--teal-d)}
 .closure-cb{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .closure-item.done .closure-cb{background:var(--teal);border-color:var(--teal);color:#fff}
 .closure-item-body{flex:1}
