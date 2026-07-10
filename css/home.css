@@ -12,6 +12,10 @@
 .al-item-link:hover{background:var(--bg2);box-shadow:var(--shadow-sm)}
 .dl-item-link{cursor:pointer;border-radius:6px;transition:background .15s}
 .dl-item-link:hover{background:var(--bg2)}
+.hm-more{display:none}
+.hm-more.open{display:flex;flex-direction:column;gap:4px}
+.hm-more-btn{background:none;border:none;padding:var(--space-2) 2px 0;margin-top:2px;font-size:var(--font-size-xs);font-weight:600;color:var(--teal);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;transition:opacity .15s}
+.hm-more-btn:hover{opacity:.75}
 .ins-item-link{cursor:pointer;transition:background .15s}
 .ins-item-link:hover{background:var(--bg2)}
 .tp-go-btn{margin-top:var(--space-2);padding:6px 14px;border-radius:var(--radius-sm);border:none;background:var(--acc);color:#fff;font-size:var(--font-size-xs);font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:opacity .15s}
