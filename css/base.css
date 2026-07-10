@@ -1,5 +1,39 @@
-:root{--bg:#fff;--bg2:#f7f6f2;--bg3:#eeecea;--text:#1a1a18;--text2:#6b6b65;--text3:#9c9a92;--border:rgba(0,0,0,.10);--border2:rgba(0,0,0,.06);--teal:#1D9E75;--teal-l:#E1F5EE;--teal-d:#085041;--amber:#BA7517;--amber-l:#FAEEDA;--red:#E24B4A;--red-l:#FCEBEB;--purple:#534AB7;--purple-l:#EEEDFE;--r:8px;--rlg:12px}
-@media(prefers-color-scheme:dark){:root{--bg:#1c1c1a;--bg2:#242420;--bg3:#2e2e2a;--text:#e6e4de;--text2:#9c9a92;--text3:#6b6966;--border:rgba(255,255,255,.09);--border2:rgba(255,255,255,.05);--teal-l:#04342C;--amber-l:#412402;--red-l:#501313;--purple-l:#26215C}}
+:root{
+  /* --- surfaces (Notion-style layered neutrals: page / card·hover / deeper fill) --- */
+  --bg:#fff;--bg2:#f7f7f5;--bg3:#efeeec;--bg-hover:#f0f0ee;
+  /* --- text (near-black, not pure black, per Notion) --- */
+  --text:#191919;--text2:#6b6b6b;--text3:#9a9a95;
+  /* --- borders (thin, low-contrast) --- */
+  --border:rgba(0,0,0,.10);--border2:rgba(0,0,0,.06);
+  /* --- accent + semantic colors (hex kept identical to values hardcoded across js/*.js badges/tags so UI stays consistent) --- */
+  --teal:#1D9E75;--teal-l:#E1F5EE;--teal-d:#085041;
+  --amber:#BA7517;--amber-l:#FAEEDA;
+  --red:#E24B4A;--red-l:#FCEBEB;
+  --purple:#534AB7;--purple-l:#EEEDFE;
+  --acc:var(--teal);
+  /* --- radius scale: --r/--rlg/--r2 are pre-existing names used across css/*.css (r2 was previously undefined -> square corners; now fixed). radius-sm/md/lg/xl are new tokens for upcoming steps (Notion ~6-8px tier, Toss ~12-16px+ tier) --- */
+  --r:8px;--rlg:12px;--r2:16px;
+  --radius-sm:6px;--radius-md:10px;--radius-lg:16px;--radius-xl:20px;
+  /* --- spacing scale (new tokens for upcoming steps) --- */
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;
+  /* --- shadow scale: soft, low-opacity elevation (new tokens for upcoming steps) --- */
+  --shadow-sm:0 1px 2px rgba(0,0,0,.04),0 1px 1px rgba(0,0,0,.03);
+  --shadow-md:0 4px 12px rgba(0,0,0,.06),0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg:0 12px 32px rgba(0,0,0,.10),0 4px 10px rgba(0,0,0,.05);
+  /* --- typography scale (new tokens for upcoming steps) --- */
+  --font-size-xs:11px;--font-size-sm:12px;--font-size-base:14px;--font-size-lg:16px;--font-size-xl:20px;--font-size-2xl:26px;--font-size-3xl:32px;
+  --line-height-base:1.6;--line-height-tight:1.3;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#242420;--bg3:#2e2e2a;--bg-hover:#2a2a26;
+  --text:#e6e4de;--text2:#9c9a92;--text3:#6b6966;
+  --border:rgba(255,255,255,.09);--border2:rgba(255,255,255,.05);
+  --teal-l:#04342C;--teal-d:#6EE7B7;
+  --amber-l:#412402;--red-l:#501313;--purple-l:#26215C;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3),0 1px 1px rgba(0,0,0,.24);
+  --shadow-md:0 4px 14px rgba(0,0,0,.36),0 2px 6px rgba(0,0,0,.28);
+  --shadow-lg:0 14px 36px rgba(0,0,0,.44),0 4px 12px rgba(0,0,0,.3);
+}}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,'Pretendard',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
 .hd{display:flex;align-items:center;justify-content:space-between;padding:13px 24px;border-bottom:.5px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
