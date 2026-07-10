@@ -143,9 +143,9 @@ function renderHome(){
     var hl=document.getElementById('hm-health-list');if(!hl)return;
     var atRisk=clients.filter(function(c){
       return c.stage!=='lost'&&c.stage!=='won'&&calculateHealthScore(c).score<=50;
-    }).map(function(c){return{c:c,s:calculateHealthScore(c).score};}).sort(function(a,b){return a.s-b.s;}).map(function(x){return x.c;}).slice(0,4);
+    }).map(function(c){return{c:c,s:calculateHealthScore(c).score};}).sort(function(a,b){return a.s-b.s;}).map(function(x){return x.c;});
     if(!atRisk.length){hl.innerHTML='<div style="font-size:12px;color:var(--text2);padding:4px 0">주의 필요 클라이언트가 없어요 &#127881;</div>';return;}
-    hl.innerHTML=atRisk.map(function(c){
+    var itemsHtml=atRisk.map(function(c){
       var hs=calculateHealthScore(c);
       var lv=getHSLevel(hs.score);
       if(!hs||!lv)return'';
@@ -158,7 +158,8 @@ function renderHome(){
         '</div>'+
         '<i class="ti ti-chevron-right" style="font-size:11px;color:var(--text3);flex-shrink:0"></i>'+
       '</div>';
-    }).join('');
+    });
+    hl.innerHTML=buildShowMoreHtml(itemsHtml,4,'health');
   })();
   renderGoalBar();
   detectPatterns();
@@ -364,15 +365,42 @@ function renderDeadlines(){
   items.sort(function(a,b){return a.diff-b.diff;});
   if(!items.length){el.innerHTML='';return;}
   var h='<div class="dl-hd"><i class="ti ti-calendar-event" style="font-size:12px"></i>다가오는 마감 · '+items.length+'건</div>';
-  h+='<div class="dl-list">';
-  h+=items.slice(0,8).map(function(it){
+  var itemsHtml=items.map(function(it){
     var dlbl=it.diff<0?'D+'+Math.abs(it.diff):it.diff===0?'오늘':'D-'+it.diff;
     var dlTab='';var dlCid=0;
     if(it.type==='bill')dlTab='billing';
     else if(it.cid){dlTab='crm';dlCid=it.cid;}
     return'<div class="'+(dlTab?'dl-item dl-item-link" data-dltab="'+dlTab+'" data-dlcid="'+dlCid+'" onclick="goDlItem(this)" title="클릭하면 이동해요':'dl-item')+'">'+'<span class="dl-date" style="background:'+it.bg+';color:'+it.color+'">'+dlbl+'</span>'+'<span class="dl-client">'+it.client+'</span>'+'<span class="dl-sep">—</span>'+'<span class="dl-desc">'+it.desc+'</span>'+'<span class="dl-type-badge" style="background:'+it.bg+';color:'+it.color+'">'+it.lbl+'</span>'+(dlTab?'<i class="ti ti-chevron-right" style="font-size:10px;color:var(--text3);margin-left:auto;flex-shrink:0"></i>':'')+'</div>';
-  }).join('')+'</div>';
+  });
+  h+='<div class="dl-list">'+buildShowMoreHtml(itemsHtml,5,'deadlines')+'</div>';
   el.innerHTML=h;
+}
+
+// 홈 화면의 긴 목록(다가오는 마감, 주의 필요 클라이언트 등)에 더보기/접기 토글을 적용한 HTML을 만든다.
+// itemsHtml: 각 항목의 HTML 문자열 배열, threshold: 기본으로 보여줄 개수, listId: 토글 대상 식별자
+function buildShowMoreHtml(itemsHtml,threshold,listId){
+  if(itemsHtml.length<=threshold)return itemsHtml.join('');
+  var visible=itemsHtml.slice(0,threshold).join('');
+  var hidden=itemsHtml.slice(threshold);
+  var out=visible;
+  out+='<div class="hm-more" id="hm-more-'+listId+'">'+hidden.join('')+'</div>';
+  out+='<button type="button" class="hm-more-btn" id="hm-more-btn-'+listId+'" data-count="'+hidden.length+'" onclick="toggleShowMore(\''+listId+'\')">'+
+    '<i class="ti ti-chevron-down" style="font-size:11px"></i>더보기 ('+hidden.length+'개 더)'+
+  '</button>';
+  return out;
+}
+
+// buildShowMoreHtml()로 생성된 목록의 숨겨진 항목들을 펼치거나 다시 접는다.
+function toggleShowMore(listId){
+  var wrap=document.getElementById('hm-more-'+listId);
+  var btn=document.getElementById('hm-more-btn-'+listId);
+  if(!wrap||!btn)return;
+  var opening=!wrap.classList.contains('open');
+  wrap.classList.toggle('open',opening);
+  var count=btn.dataset.count;
+  btn.innerHTML=opening?
+    '<i class="ti ti-chevron-up" style="font-size:11px"></i>접기':
+    '<i class="ti ti-chevron-down" style="font-size:11px"></i>더보기 ('+count+'개 더)';
 }
 
 function renderMonthlyReport(){

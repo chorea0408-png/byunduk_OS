@@ -69,9 +69,9 @@ let curSc='neu';
 const SC_MULTI={opt:1.3,neu:1.0,pes:0.7};
 
 const SC_INFO={
-  opt:{label:'낙관',color:'#1D9E75',bg:'#E1F5EE',cls:'opt'},
-  neu:{label:'중립',color:'#185FA5',bg:'#E6F1FB',cls:'neu'},
-  pes:{label:'비관',color:'#E24B4A',bg:'#FCEBEB',cls:'pes'},
+  opt:{label:'낙관',color:'#1D9E75',colorDark:'#6EE7B7',bg:'#E1F5EE',bgDark:'#04342C',cls:'opt'},
+  neu:{label:'중립',color:'#185FA5',colorDark:'#7DD3FC',bg:'#E6F1FB',bgDark:'#0A2E42',cls:'neu'},
+  pes:{label:'비관',color:'#E24B4A',colorDark:'#FCA5A5',bg:'#FCEBEB',bgDark:'#501313',cls:'pes'},
 };
 
 function setSc(sc){
@@ -84,13 +84,15 @@ function setSc(sc){
 
 function renderScCompare(){
   const wrap=document.getElementById('sc-compare');if(!wrap)return;
+  const dark=isDark();
   wrap.innerHTML=['opt','neu','pes'].map(function(sc){
     const info=SC_INFO[sc];
     const tgt=Math.round(rvTarget*SC_MULTI[sc]);
     const isActive=sc===curSc;
-    return'<div class="sc-card '+(isActive?'active-sc':'')+'" style="border-left-color:'+info.color+';background:'+(isActive?info.bg:'var(--bg)')+'">'+
-      '<div class="sc-card-t" style="color:'+info.color+'">'+info.label+'</div>'+
-      '<div class="sc-card-v" style="color:'+info.color+'">'+tgt+'만</div>'+
+    const col=dark?info.colorDark:info.color;
+    return'<div class="sc-card '+(isActive?'active-sc':'')+'" style="border-left-color:'+info.color+';background:'+(isActive?(dark?info.bgDark:info.bg):'var(--bg)')+'">'+
+      '<div class="sc-card-t" style="color:'+col+'">'+info.label+'</div>'+
+      '<div class="sc-card-v" style="color:'+col+'">'+tgt+'만</div>'+
       '<div class="sc-card-s">목표 ×'+SC_MULTI[sc]+'</div>'+
     '</div>';
   }).join('');
@@ -125,10 +127,12 @@ function renderAiAssist(){
   if(trend3&&trend3>0)reasons.push('3개월 성장 추세 반영');
   var html='<div class="ai-assist-hd"><i class="ti ti-robot"></i>다음 달 수익 예측 (AI 어시스트)</div>';
   html+='<div class="ai-trend">'+trendStr+'</div>';
+  var predDark=isDark();
+  var optCol=predDark?'#6EE7B7':'#1D9E75',pesCol=predDark?'#FCA5A5':'#E24B4A';
   html+='<div class="ai-pred-grid">';
-  html+='<div class="ai-pred-card opt"><div class="ai-pred-lbl" style="color:#1D9E75">낙관</div><div class="ai-pred-v" style="color:#1D9E75">'+opt+'만</div><div class="ai-pred-s">파이프라인 90%</div></div>';
+  html+='<div class="ai-pred-card opt"><div class="ai-pred-lbl" style="color:'+optCol+'">낙관</div><div class="ai-pred-v" style="color:'+optCol+'">'+opt+'만</div><div class="ai-pred-s">파이프라인 90%</div></div>';
   html+='<div class="ai-pred-card neu"><div class="ai-pred-lbl" style="color:var(--text2)">중립</div><div class="ai-pred-v">'+base+'만</div><div class="ai-pred-s">파이프라인 60%</div></div>';
-  html+='<div class="ai-pred-card pes"><div class="ai-pred-lbl" style="color:#E24B4A">비관</div><div class="ai-pred-v" style="color:#E24B4A">'+pes+'만</div><div class="ai-pred-s">파이프라인 30%</div></div>';
+  html+='<div class="ai-pred-card pes"><div class="ai-pred-lbl" style="color:'+pesCol+'">비관</div><div class="ai-pred-v" style="color:'+pesCol+'">'+pes+'만</div><div class="ai-pred-s">파이프라인 30%</div></div>';
   html+='</div>';
   if(reasons.length)html+='<div class="ai-reasoning">&#128204; 예측 근거: '+reasons.join(' / ')+'</div>';
   // Claude 프롬프트 생성

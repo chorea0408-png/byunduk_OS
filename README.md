@@ -8,39 +8,42 @@
 byunduk_OS/
 ├── index.html                     # 메인 HTML (구조 + CSS/JS 연결)
 ├── css/
-│   ├── base.css                   # 공통 스타일 (색상 변수, 리셋, 레이아웃 기본)
-│   ├── home.css                   # 홈 대시보드
-│   ├── detail-billing.css         # 클라이언트 상세 패널 + 청구서
-│   ├── letter.css                 # 변덕레터
-│   ├── growth-analytics.css       # 채널 성장
-│   ├── action-board.css           # 액션 보드
-│   ├── crm-search-expenses.css    # CRM 검색/필터 + 지출
-│   ├── crm-relationship.css       # 관계 티어(CRM)
-│   ├── quote.css                  # 견적 자동화
-│   ├── forecast-analytics.css     # 수익 예측 · 수익성 분석 등 리포트
-│   ├── responsive-deadline.css    # 모바일 반응형 + 마감/필터 UI
-│   ├── crm-extras.css             # CRM 상세 확장 기능(타임로그, 제안서, 종료 체크 등)
-│   └── reports-partners.css       # LTV 비교, SOP 트래커, 파이프라인 속도, 외주 파트너 탭
+│   ├── base.css                       # 공통 스타일 (디자인 토큰: 색상/간격/모서리/그림자/타이포, 리셋, 레이아웃 기본)
+│   ├── home.css                       # 홈 대시보드
+│   ├── detail-billing.css             # 클라이언트 상세 패널 + 청구서
+│   ├── letter.css                     # 변덕레터
+│   ├── channel-growth-analytics.css   # 채널 성장
+│   ├── action-board.css               # 액션 보드
+│   ├── crm-search.css                 # CRM 검색/필터
+│   ├── expenses-recontract.css        # 지출 트래커 + 재계약률
+│   ├── crm-toolkit.css                # 관계 티어, Sheets 동기화, CRM 강화, 미팅노트/메시지 템플릿, 건강도 스코어, 시나리오, 지출 예산, 리스트뷰, 납기 캘린더
+│   ├── quote.css                      # 견적 자동화
+│   ├── forecast-analytics.css         # 수익 예측 · 수익성 분석 등 리포트
+│   ├── misc-widgets-responsive.css    # 모바일 반응형 + 마감/필터/퍼널/네비게이션 UI
+│   ├── crm-productivity-tools.css     # CRM 상세 확장 기능(접기, 퀵로그, AI 수익 예측, 타임로그, 제안서, 종료 체크 등)
+│   └── analytics-partners.css         # LTV 비교, SOP 트래커, 외주 파트너 탭, 파이프라인 속도, 인사이트 카드
 ├── js/
-│   ├── core.js                    # 공용 데이터 (전역 상태, 상수)
-│   ├── shared.js                  # 공통 유틸 함수 (저장, 탭 전환, 테마, 토스트, 검색 등)
-│   ├── home.js                    # 홈 탭
-│   ├── crm.js                     # 파이프라인(CRM) 탭
-│   ├── capacity.js                # Capacity 탭
-│   ├── forecast.js                # 수익 예측 탭
-│   ├── profitability.js           # 수익성 분석 탭
-│   ├── ideas-retro.js             # 콘텐츠 보관함 + 월간 회고 탭
-│   ├── billing.js                 # 청구서 탭
-│   ├── letter.js                  # 변덕레터 탭
-│   ├── channel.js                 # 채널 성장 탭
-│   ├── source.js                  # 유입경로 탭
-│   ├── goals-actionboard.js       # 연간 목표 + 액션 보드 탭
-│   ├── expenses-tiers.js          # 지출 + 관계 티어 탭
-│   ├── quote.js                   # 견적 자동화 탭
-│   ├── memos.js                   # 메모장 탭
-│   ├── partners.js                # 외주 파트너 탭
-│   ├── analytics.js               # Google Sheets 연동 + 리포트 분석(서비스 믹스, 정확도, 마감 소요시간)
-│   └── init.js                    # 초기화/부트스트랩 (앱 시작 시 실행)
+│   ├── core.js                        # 공용 데이터 (전역 상태, 상수)
+│   ├── shared.js                      # 공통 유틸 함수 (저장, 탭 전환, 테마, 토스트, 검색 등)
+│   ├── home.js                        # 홈 탭
+│   ├── crm-core.js                    # 파이프라인(CRM) 탭 - 핵심 로직
+│   ├── crm-detail.js                  # 파이프라인(CRM) 탭 - 고객 상세
+│   ├── crm-deals.js                   # 파이프라인(CRM) 탭 - 딜/거래 관리
+│   ├── capacity.js                    # Capacity 탭
+│   ├── forecast.js                    # 수익 예측 탭
+│   ├── profitability.js               # 수익성 분석 탭
+│   ├── ideas-retro.js                 # 콘텐츠 보관함 + 월간 회고 탭
+│   ├── billing.js                     # 청구서 탭
+│   ├── letter.js                      # 변덕레터 탭
+│   ├── channel.js                     # 채널 성장 탭
+│   ├── source.js                      # 유입경로 탭
+│   ├── goals-actionboard.js           # 연간 목표 + 액션 보드 탭
+│   ├── expenses-tiers.js              # 지출 + 관계 티어 탭
+│   ├── quote.js                       # 견적 자동화 탭
+│   ├── memos.js                       # 메모장 탭
+│   ├── partners.js                    # 외주 파트너 탭
+│   ├── analytics.js                   # Google Sheets 연동 + 리포트 분석(서비스 믹스, 정확도, 마감 소요시간)
+│   └── init.js                        # 초기화/부트스트랩 (앱 시작 시 실행)
 ├── README.md                      # 이 문서
 └── 변덕쟁이들_OS_v34c.html         # 원본 백업 (분리 전 통짜 파일, 참고용 보존)
 ```
@@ -52,6 +55,14 @@ byunduk_OS/
 - 별도 설치나 빌드가 필요 없습니다.
 - 입력한 데이터는 브라우저의 localStorage에 저장됩니다.
 
+### GitHub Pages로 바로 보기
+
+설치 없이 브라우저에서 바로 확인하고 싶다면 GitHub Pages 배포본을 이용하세요.
+
+**https://chorea0408-png.github.io/byunduk_OS/**
+
+현재는 리뷰를 위해 `claude/slack-session-gdja9x` 브랜치를 서빙하도록 설정되어 있습니다. 이 브랜치가 `main`에 머지되면, 필요 시 Pages 소스를 `main`으로 전환하는 것을 고려하세요 (이 작업은 저장소 Settings → Pages에서 수동으로 진행해야 합니다).
+
 ## 외부 의존성
 
 - **Tabler Icons** — 아이콘 웹폰트
@@ -61,10 +72,16 @@ byunduk_OS/
 
 ## 리팩토링 히스토리
 
-이 프로젝트는 지금까지 두 차례 리팩토링을 거쳤습니다.
+이 프로젝트는 지금까지 세 차례 리팩토링을 거쳤습니다.
 
 1. **1차**: 최초 통짜 HTML 파일(약 7,674줄)을 `index.html` / `css/` / `js/` 3개로 분리.
-2. **2차 (현재 구조)**: 이후 CSS와 JS를 각각 기능별 파일로 세분화. 각 탭/기능이 자신만의 css·js 파일을 갖도록 정리했습니다.
+2. **2차**: 이후 CSS와 JS를 각각 기능별 파일로 세분화. 각 탭/기능이 자신만의 css·js 파일을 갖도록 정리했습니다. (`crm.js`도 이후 `crm-core.js` / `crm-detail.js` / `crm-deals.js`로 추가 분할)
+3. **3차 (디자인 개편, 현재 구조)**: Notion·Toss 스타일의 미니멀 디자인을 도입했습니다.
+   - 색상/간격/모서리/그림자/타이포그래피를 `base.css`의 디자인 토큰 체계로 재정의
+   - 버튼·카드·모달·탭·KPI 등 공통 컴포넌트를 노션·토스 스타일로 재정비
+   - 화면 전반의 정보 밀도 개선 (여백/타이포 정리)
+   - 홈 화면의 긴 목록에 더보기/접기 기능 추가
+   - 다크/라이트 모드 수동 전환 버그 수정, 그리고 회귀 검증 과정에서 발견된 다크 모드 카드/배지 대비 문제(고정 라이트 틴트 배경에 테마 텍스트가 겹쳐 안 보이던 문제) 수정
 
 앞으로 새 기능을 추가할 때는 해당 기능의 css/js 파일에 추가하면 됩니다. `index.html`의 스크립트 로드 순서(`core.js` → `shared.js` → 기능별 파일들 → `init.js`)는 반드시 유지해야 합니다 — 순서를 바꾸면 오류가 날 수 있습니다.
 
