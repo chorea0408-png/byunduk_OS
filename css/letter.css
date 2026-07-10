@@ -1,29 +1,29 @@
 /* ─── 변덕레터 ─── */
-.lt-form{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:flex-end}
-.lt-form input,.lt-form select{font-size:12px;padding:7px 9px;border-radius:var(--r);border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit}
+.lt-form{display:flex;gap:var(--space-2);margin-bottom:var(--space-3);flex-wrap:wrap;align-items:flex-end}
+.lt-form input,.lt-form select{font-size:var(--font-size-sm);padding:7px var(--space-2);border-radius:var(--radius-sm);border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit}
 .lt-form input[type=text]{flex:2;min-width:140px}
 .lt-form input[type=number]{width:80px}
 .lt-form input[type=date]{width:130px}
-.lt-subhd{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;margin-top:1.25rem;padding-bottom:8px;border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:6px}
+.lt-subhd{font-size:13px;font-weight:700;color:var(--text);margin-bottom:var(--space-2);margin-top:var(--space-5);padding-bottom:var(--space-2);border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:6px}
 .lt-subhd:first-of-type{margin-top:0}
-.lt-table{width:100%;border-collapse:collapse;font-size:12px}
-.lt-table th{font-size:11px;font-weight:500;color:var(--text2);padding:6px 10px;text-align:left;border-bottom:.5px solid var(--border);white-space:nowrap}
-.lt-table td{padding:9px 10px;border-bottom:.5px solid var(--border2);vertical-align:middle}
+.lt-table{width:100%;border-collapse:collapse;font-size:var(--font-size-sm)}
+.lt-table th{font-size:var(--font-size-xs);font-weight:500;color:var(--text2);padding:var(--space-2) var(--space-3);text-align:left;border-bottom:.5px solid var(--border);white-space:nowrap}
+.lt-table td{padding:var(--space-2) var(--space-3);border-bottom:.5px solid var(--border2);vertical-align:middle}
 .lt-table tr:hover td{background:var(--bg2)}
 .lt-table tr:last-child td{border-bottom:none}
-.lt-iss{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--bg3);color:var(--text2);white-space:nowrap}
-.lt-ttl{font-size:12px;font-weight:500;color:var(--text)}
-.lt-note{font-size:11px;color:var(--text3);margin-top:2px}
-.lt-stat{font-size:11px;color:var(--text2)}
+.lt-iss{font-size:var(--font-size-xs);font-weight:600;padding:2px var(--space-2);border-radius:99px;background:var(--bg3);color:var(--text2);white-space:nowrap}
+.lt-ttl{font-size:var(--font-size-sm);font-weight:500;color:var(--text)}
+.lt-note{font-size:var(--font-size-xs);color:var(--text3);margin-top:2px}
+.lt-stat{font-size:var(--font-size-xs);color:var(--text2)}
 .lt-bar-wrap{display:flex;align-items:center;gap:6px}
 .lt-bar-bg{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;width:60px;flex-shrink:0}
 .lt-bar-f{height:4px;border-radius:2px}
-.lt-empty{text-align:center;padding:2rem;font-size:12px;color:var(--text2);border:.5px dashed var(--border);border-radius:var(--rlg);margin-top:8px}
-.lt-goal-strip{display:flex;align-items:center;gap:10px;background:var(--bg2);border-radius:var(--r);padding:9px 14px;margin-bottom:14px;flex-wrap:wrap}
-.lt-goal-strip label{font-size:12px;color:var(--text2);white-space:nowrap}
-.lt-goal-strip input{font-size:12px;padding:4px 8px;border-radius:var(--r);border:.5px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;width:70px}
-.lt-del{font-size:11px;padding:2px 7px;border-radius:4px;border:.5px solid var(--border);background:none;color:var(--text3);cursor:pointer;font-family:inherit}
+.lt-empty{text-align:center;padding:2rem;font-size:var(--font-size-sm);color:var(--text2);border:.5px dashed var(--border);border-radius:var(--radius-lg);margin-top:var(--space-2)}
+.lt-goal-strip{display:flex;align-items:center;gap:var(--space-2);background:var(--bg2);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3);margin-bottom:var(--space-4);flex-wrap:wrap}
+.lt-goal-strip label{font-size:var(--font-size-sm);color:var(--text2);white-space:nowrap}
+.lt-goal-strip input{font-size:var(--font-size-sm);padding:4px var(--space-2);border-radius:var(--radius-sm);border:.5px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;width:70px}
+.lt-del{font-size:var(--font-size-xs);padding:2px 7px;border-radius:4px;border:.5px solid var(--border);background:none;color:var(--text3);cursor:pointer;font-family:inherit}
 .lt-del:hover{color:var(--red);border-color:var(--red)}
-.lt-adv{font-size:11px;padding:2px 8px;border-radius:4px;border:.5px solid var(--border);background:none;color:var(--text2);cursor:pointer;font-family:inherit}
+.lt-adv{font-size:var(--font-size-xs);padding:2px var(--space-2);border-radius:4px;border:.5px solid var(--border);background:none;color:var(--text2);cursor:pointer;font-family:inherit}
 .lt-adv:hover{background:var(--bg2)}
 
