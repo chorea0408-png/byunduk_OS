@@ -34,6 +34,28 @@
   --shadow-md:0 4px 14px rgba(0,0,0,.36),0 2px 6px rgba(0,0,0,.28);
   --shadow-lg:0 14px 36px rgba(0,0,0,.44),0 4px 12px rgba(0,0,0,.3);
 }}
+/* --- manual theme toggle overrides (html.force-dark/force-light set by toggleTheme() in js/shared.js) --- */
+/* kept in sync with the tokens above so the manual toggle never drifts from the OS-driven media query */
+html.force-dark{
+  --bg:#1c1c1a;--bg2:#242420;--bg3:#2e2e2a;--bg-hover:#2a2a26;
+  --text:#e6e4de;--text2:#9c9a92;--text3:#6b6966;
+  --border:rgba(255,255,255,.09);--border2:rgba(255,255,255,.05);
+  --teal-l:#04342C;--teal-d:#6EE7B7;
+  --amber-l:#412402;--red-l:#501313;--purple-l:#26215C;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3),0 1px 1px rgba(0,0,0,.24);
+  --shadow-md:0 4px 14px rgba(0,0,0,.36),0 2px 6px rgba(0,0,0,.28);
+  --shadow-lg:0 14px 36px rgba(0,0,0,.44),0 4px 12px rgba(0,0,0,.3);
+}
+html.force-light{
+  --bg:#fff;--bg2:#f7f7f5;--bg3:#efeeec;--bg-hover:#f0f0ee;
+  --text:#191919;--text2:#6b6b6b;--text3:#9a9a95;
+  --border:rgba(0,0,0,.10);--border2:rgba(0,0,0,.06);
+  --teal-l:#E1F5EE;--teal-d:#085041;
+  --amber-l:#FAEEDA;--red-l:#FCEBEB;--purple-l:#EEEDFE;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.04),0 1px 1px rgba(0,0,0,.03);
+  --shadow-md:0 4px 12px rgba(0,0,0,.06),0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg:0 12px 32px rgba(0,0,0,.10),0 4px 10px rgba(0,0,0,.05);
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,'Pretendard',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
 .hd{display:flex;align-items:center;justify-content:space-between;padding:13px 24px;border-bottom:.5px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
