@@ -1,4 +1,4 @@
-/* ─── 관계 티어 ─── */
+/* ─── 팬 등급 관리 (구 "관계 티어") ─── */
 .tier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:var(--space-2);margin-bottom:var(--space-4)}
 .tier-stat{background:var(--bg);border:.5px solid var(--border);border-left-width:3px;border-left-style:solid;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:var(--space-3) var(--space-4)}
 .tier-stat-nm{font-size:var(--font-size-xs);font-weight:500;margin-bottom:4px}

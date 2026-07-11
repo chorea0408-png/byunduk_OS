@@ -3,9 +3,8 @@ function saveExp(){
 }
 
 function getMonthRev(i){
-  const el=document.getElementById('yr-act-'+i);
-  if(el&&el.value)return parseInt(el.value)||0;
-  return monthlyActuals[i]||0;
+  // 연간목표 탭과 동일한 단일 기준(getActualMonthlyRevenue)을 사용 — 청구서 입금액 우선, 없으면 수동 입력값 폴백
+  return getActualMonthlyRevenue(i);
 }
 
 function getMonthExp(i){return expCategories.reduce(function(a,cat){return a+(cat.months[i]||0);},0);}

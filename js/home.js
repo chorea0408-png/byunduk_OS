@@ -549,11 +549,9 @@ function renderGoalBar(){
   var el=document.getElementById('hm-goal-bar');if(!el)return;
   var s=loadSettings();
   var target=s.rvTarget||rvTarget||200;
-  // 이번 달 청구서 입금 완료 금액
-  var now=new Date();var ms=new Date(now.getFullYear(),now.getMonth(),1);
-  var earned=bills.filter(function(b){
-    return b.status==='paid'&&b.issueDate&&new Date(b.issueDate)>=ms;
-  }).reduce(function(s,b){return s+b.amount;},0);
+  // 이번 달 실제 매출 (청구서 입금 완료 기준, 없으면 수동 입력값 폴백) — getActualMonthlyRevenue()로 앱 전체 단일 계산
+  var now=new Date();
+  var earned=getActualMonthlyRevenue(now.getMonth(),now.getFullYear());
   var pipe=0;clients.filter(function(c){
     return c.stage!=='won'&&c.stage!=='lost';
   }).forEach(function(c){

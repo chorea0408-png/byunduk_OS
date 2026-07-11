@@ -6,9 +6,25 @@ function gArc(sd,sw){if(sw<=.3)return'';const s=gPt(sd),e=gPt(sd+Math.min(sw,239
 
 function gColor(p){return p<.7?'#1D9E75':p<.9?'#BA7517':'#E24B4A';}
 
+// 클라이언트별 이번 주(최근 7일) 캐파시티 시간을 계산한다.
+// cl.timeLog에 최근 7일 내 실제 기록이 있으면 그 합계(실측)를 쓰고,
+// 기록이 전혀 없는 클라이언트는 서비스 유형의 예상 주간 시간(TYPES[i].hours, 추정)으로 대체한다.
+function getClientCapacityHours(cl){
+  const now=new Date();now.setHours(0,0,0,0);
+  const weekAgo=new Date(now);weekAgo.setDate(weekAgo.getDate()-7);
+  const real=(cl.timeLog||[]).filter(function(t){
+    const d=new Date(t.date);
+    return d>=weekAgo&&d<=now;
+  }).reduce(function(s,t){return s+(Number(t.hours)||0);},0);
+  if(real>0)return{hours:real,real:true};
+  const est=(TYPES[cl.typeIdx]||TYPES[0]).hours;
+  return{hours:est,real:false};
+}
+
 function renderCapacity(){
   const active=clients.filter(c=>c.stage==='won');
-  const used=active.reduce((a,c)=>a+(TYPES[c.typeIdx]||TYPES[0]).hours,0);
+  const capData=active.map(function(c){return{c:c,cap:getClientCapacityHours(c)};});
+  const used=Math.round(capData.reduce((a,x)=>a+x.cap.hours,0)*10)/10;
   const p=used/capHours,pct=Math.round(Math.min(p,1)*100),free=Math.max(capHours-used,0),col=gColor(p);
   const dark=isDark();
   document.getElementById('g-bg').setAttribute('d',gArc(GSA,GSW));
@@ -27,7 +43,11 @@ function renderCapacity(){
   document.getElementById('cap-k3').textContent=free+'h';
   const pl=document.getElementById('cap-list');
   if(!active.length){pl.innerHTML='<div style="padding:16px;text-align:center;font-size:12px;color:var(--text2)">Closed Won 프로젝트 없음</div>';}
-  else pl.innerHTML=active.map(c=>{const t=TYPES[c.typeIdx]||TYPES[0];const bw=Math.min(Math.round(t.hours/capHours*100),100);return`<div class="pi"><div><div class="pi-nm">${c.name}</div><div class="pi-tp">${t.name}</div><div class="bar-bg"><div style="height:3px;border-radius:2px;width:${bw}%;background:${t.color}"></div></div></div><div style="font-size:11px;color:var(--text2);text-align:right">${t.name}</div><div style="font-size:13px;font-weight:600;color:${t.color};text-align:right">${t.hours}h/주</div></div>`;}).join('');
+  else pl.innerHTML=capData.map(x=>{const c=x.c,t=TYPES[c.typeIdx]||TYPES[0];const hrs=x.cap.hours;const bw=Math.min(Math.round(hrs/capHours*100),100);
+    const modeBdg=x.cap.real
+      ?'<span title="최근 7일 실제 로그된 시간 기준" style="font-size:9px;font-weight:600;color:var(--teal);border:.5px solid var(--teal);border-radius:99px;padding:0 5px;margin-left:5px">실측 기준</span>'
+      :'<span title="시간 로그가 없어 서비스 유형의 예상 시간으로 대체" style="font-size:9px;font-weight:500;color:var(--text3);border:.5px solid var(--border);border-radius:99px;padding:0 5px;margin-left:5px">추정 기준</span>';
+    return`<div class="pi"><div><div class="pi-nm">${c.name}${modeBdg}</div><div class="pi-tp">${t.name}</div><div class="bar-bg"><div style="height:3px;border-radius:2px;width:${bw}%;background:${t.color}"></div></div></div><div style="font-size:11px;color:var(--text2);text-align:right">${t.name}</div><div style="font-size:13px;font-weight:600;color:${t.color};text-align:right">${hrs}h/주</div></div>`;}).join('');
   const warn=document.getElementById('cap-warn');
   if(p>=.9){const ov=Math.max(used-capHours,0);warn.style.cssText=`background:${p>=1?'#FCEBEB':'#FAEEDA'};color:${p>=1?'#791F1F':'#633806'};border-radius:8px;padding:10px 14px;font-size:12px;line-height:1.6;margin-top:8px`;warn.textContent=p>=1?`주간 ${ov}시간 초과예요. 가장 가벼운 프로젝트의 일정 분산을 고려하세요.`:`용량의 ${pct}%가 찼어요. 신규 수주 전 기존 마감을 확인하세요.`;}
   else{warn.style.cssText='';warn.textContent='';}

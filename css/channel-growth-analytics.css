@@ -50,8 +50,11 @@
 .yr-month.has{border-color:var(--border)}
 .yr-mon-lbl{font-size:10px;font-weight:500;color:var(--text2);margin-bottom:5px}
 .yr-mon-lbl.cur{color:var(--teal-d)}
+.yr-mode-lbl{font-size:9px;font-weight:400;color:var(--text3);margin-left:4px}
+.yr-mode-lbl.auto{color:var(--teal)}
 .yr-month input{width:100%;font-size:var(--font-size-sm);font-weight:500;background:none;border:none;color:var(--text);font-family:inherit;outline:none;padding:0;text-align:left}
 .yr-month input::placeholder{color:var(--text3);font-weight:400}
+.yr-month input[readonly]{color:var(--teal);cursor:default}
 .yr-mon-bar-bg{height:3px;background:var(--bg3);border-radius:2px;margin-top:6px;overflow:hidden}
 .yr-mon-bar-f{height:3px;border-radius:2px;background:var(--teal);transition:width .3s}
 .yr-compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-2)}
