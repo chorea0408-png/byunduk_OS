@@ -97,6 +97,28 @@ function importJSON(input){
   reader.readAsText(file);input.value='';
 }
 
+// ─── 월별 실제 매출 (청구서 기준 자동 계산) ───
+// 앱 전체에서 "N월 실제 매출"을 계산하는 단일 기준. 입금 완료(status==='paid') 청구서를
+// 발행일(issueDate) 기준으로 해당 연/월에 귀속시켜 합산한다. (단위: 만원, bills와 monthlyActuals 동일 단위)
+function getBillsRevenueForMonth(monthIndex,year){
+  var yr=(year!==undefined&&year!==null)?year:new Date().getFullYear();
+  var monStart=new Date(yr,monthIndex,1);
+  var monEnd=new Date(yr,monthIndex+1,1);
+  return bills.filter(function(b){
+    if(b.status!=='paid'||!b.issueDate)return false;
+    var d=new Date(b.issueDate);
+    return d>=monStart&&d<monEnd;
+  }).reduce(function(s,b){return s+(Number(b.amount)||0);},0);
+}
+
+// 청구서 기반 자동 계산값이 있으면 그 값을, 없으면(0이면) 과거에 수동으로 입력해둔
+// monthlyActuals[monthIndex] 값을 그대로 보존해서 사용한다. (자동 계산이 우선, 수동 입력은 폴백)
+function getActualMonthlyRevenue(monthIndex,year){
+  var billsVal=getBillsRevenueForMonth(monthIndex,year);
+  if(billsVal>0)return billsVal;
+  return (monthlyActuals&&monthlyActuals[monthIndex])||0;
+}
+
 function aiPrompt(text){
   navigator.clipboard.writeText(text).then(()=>{
     const t=document.createElement('div');

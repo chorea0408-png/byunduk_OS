@@ -213,6 +213,24 @@ function saveAnnual(){
 }
 
 function renderAnnual(){
+  const yrForActuals=new Date().getFullYear();
+  // 청구서 입금 기준 자동 계산값을 월별 입력칸에 반영한다.
+  // 자동 계산값이 있는(0보다 큰) 달은 그 값으로 채우고 읽기전용으로 잠근다 (자동 계산 우선).
+  // 자동 계산값이 없는 달은 기존에 수동으로 입력해둔 값을 그대로 두고 계속 편집 가능하게 둔다 (폴백 보존).
+  for(let i=0;i<12;i++){
+    const input=document.getElementById('yr-act-'+i);
+    const modeLbl=document.getElementById('yr-md-'+i);
+    if(!input)continue;
+    const billsVal=getBillsRevenueForMonth(i,yrForActuals);
+    if(billsVal>0){
+      input.value=billsVal;
+      input.readOnly=true;
+      if(modeLbl){modeLbl.textContent='자동 계산됨';modeLbl.className='yr-mode-lbl auto';}
+    }else{
+      input.readOnly=false;
+      if(modeLbl){modeLbl.textContent=input.value?'수동 입력':'';modeLbl.className='yr-mode-lbl';}
+    }
+  }
   saveAnnual();
   const annRevGoal=parseInt(document.getElementById('yr-rev-goal').value)||2400;
   const annCliGoal=parseInt(document.getElementById('yr-cli-goal').value)||20;
