@@ -53,7 +53,7 @@
   <button class="tab" data-tab="annual" onclick="switchTab('annual')"><i class="ti ti-target"></i>연간 목표</button>
   <button class="tab" data-tab="action" onclick="switchTab('action')"><i class="ti ti-list-check"></i>액션 보드</button>
   <button class="tab" data-tab="expense" onclick="switchTab('expense')"><i class="ti ti-report-money"></i>지출</button>
-  <button class="tab" data-tab="tier" onclick="switchTab('tier')"><i class="ti ti-users-group"></i>관계 티어</button>
+  <button class="tab" data-tab="tier" onclick="switchTab('tier')"><i class="ti ti-users-group"></i>팬 등급 관리</button>
   <button class="tab" data-tab="quote" onclick="switchTab('quote')"><i class="ti ti-calculator"></i>견적 자동화</button>
   <button class="tab" data-tab="memo" onclick="switchTab('memo')"><i class="ti ti-notebook"></i>메모장</button>
   <button class="tab" data-tab="partner" onclick="switchTab('partner')"><i class="ti ti-user-check"></i>외주 파트너</button>
@@ -88,7 +88,7 @@
     <button class="nav-drop-item" data-tab="memo" onclick="navJump(this.dataset.tab)"><i class="ti ti-notebook" style="font-size:13px"></i>메모장</button>
     <button class="nav-drop-item" data-tab="quote" onclick="navJump(this.dataset.tab)"><i class="ti ti-calculator" style="font-size:13px"></i>견적 자동화</button>
     <button class="nav-drop-item" data-tab="partner" onclick="navJump(this.dataset.tab)"><i class="ti ti-user-check" style="font-size:13px"></i>외주 파트너</button>
-    <button class="nav-drop-item" data-tab="tier" onclick="navJump(this.dataset.tab)"><i class="ti ti-users-group" style="font-size:13px"></i>관계 티어</button>
+    <button class="nav-drop-item" data-tab="tier" onclick="navJump(this.dataset.tab)"><i class="ti ti-users-group" style="font-size:13px"></i>팬 등급 관리</button>
     </div>
   </div>
 </div>
@@ -697,7 +697,7 @@
   </div>
 </section>
 
-<!-- 관계 티어 -->
+<!-- 팬 등급 관리 (구 "관계 티어" — 뉴스레터/SNS 팬·구독자 등급 관리 기능이며 CRM 클라이언트와는 무관) -->
 <section class="panel" data-tab="tier">
   <div class="toolbar" style="margin-bottom:10px">
     <div style="font-size:12px;color:var(--text2)">팬·독자 관계를 4단계 Tier로 관리하세요</div>
