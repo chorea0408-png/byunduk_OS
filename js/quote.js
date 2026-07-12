@@ -54,7 +54,33 @@ function toggleQuoteOpt(idStr,oid){
   renderQuote();
 }
 
-function qtSetClient(val){quoteClientId=val;renderQuoteOutput();}
+function qtSetClient(val){quoteClientId=val;renderQuoteOutput();renderQtCompare();}
+
+function qtToManwon(won){return Math.round(won/10000);}
+
+function renderQtCompare(){
+  var box=document.getElementById('qt-crm-compare');if(!box)return;
+  if(!quoteClientId){box.innerHTML='';return;}
+  var cl=clients.find(function(c){return c.id===parseInt(quoteClientId);});
+  if(!cl){box.innerHTML='';return;}
+  var quoteManwon=qtToManwon(qtGetTotal());
+  var match=cl.amount===quoteManwon;
+  box.innerHTML='<div class="qt-compare-row">현재 CRM 금액: <b>'+cl.amount+'만원</b> → 이 견적 금액: <b>'+quoteManwon+'만원</b>'+
+    (match?' <span class="qt-compare-ok">✓ 일치</span>':'')+'</div>'+
+    '<button class="qt-copy-btn" style="margin-top:6px" onclick="applyQuoteToCrm()">'+(match?'CRM 금액에 반영하기 (이미 일치)':'CRM 금액에 반영하기')+'</button>';
+}
+
+function applyQuoteToCrm(){
+  if(!quoteClientId){showToast('먼저 클라이언트를 연결해주세요');return;}
+  var cl=clients.find(function(c){return c.id===parseInt(quoteClientId);});
+  if(!cl){showToast('연결된 클라이언트를 찾을 수 없어요');return;}
+  var manwon=qtToManwon(qtGetTotal());
+  cl.amount=manwon;
+  save();
+  if(typeof renderCRM==='function')renderCRM();
+  renderQtCompare();
+  showToast('✅ '+cl.name+'님 CRM 금액이 '+manwon+'만원으로 반영됐어요!');
+}
 
 function qtSetFmt(fmt){
   quoteFmt=fmt;
@@ -227,5 +253,6 @@ function renderQuote(){
       clients.filter(function(c){return['won','negotiation','proposal','discovery'].includes(c.stage);})
       .map(function(c){return'<option value="'+c.id+'"'+(String(c.id)===String(quoteClientId)?' selected':'')+'>'+c.name+'</option>';}).join('');
   }
+  renderQtCompare();
   renderQuoteOutput();
 }
