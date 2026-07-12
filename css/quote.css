@@ -35,6 +35,8 @@
 .qt-copy-btn:hover{opacity:.88}.qt-copy-btn:active{opacity:.7}
 .qt-memo{width:100%;font-size:11px;padding:6px 9px;border-radius:var(--radius-sm);border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit;resize:none;margin-top:8px;box-sizing:border-box}
 .qt-client-row{margin-bottom:9px}
+.qt-compare-row{font-size:11px;color:var(--text2);padding:7px 9px;background:var(--bg);border:.5px solid var(--border);border-radius:var(--radius-sm);line-height:1.5}
+.qt-compare-ok{color:var(--teal);font-weight:600}
 .qt-client-sel{width:100%;font-size:11px;padding:5px 8px;border-radius:var(--radius-sm);border:.5px solid var(--border);background:var(--bg2);color:var(--text);font-family:inherit}
 .qt-reset-btn{font-size:11px;padding:4px 9px;border-radius:var(--radius-sm);border:.5px solid var(--border);background:none;color:var(--text3);cursor:pointer;font-family:inherit}
 .qt-reset-btn:hover{color:var(--red);border-color:var(--red)}
