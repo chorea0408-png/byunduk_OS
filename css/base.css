@@ -59,7 +59,7 @@ html.force-light{
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,'Pretendard',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
 .hd{display:flex;align-items:center;justify-content:space-between;padding:var(--space-3) var(--space-5);border-bottom:.5px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
-.logo{font-size:15px;font-weight:700;letter-spacing:-.3px}.logo em{color:var(--teal);font-style:normal;font-weight:400}
+.logo{font-size:15px;font-weight:700;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;max-width:45vw}.logo em{color:var(--teal);font-style:normal;font-weight:400}
 .hd-right{display:flex;align-items:center;gap:10px}.saved-tag{font-size:11px;color:var(--text3)}
 .tabs{display:flex;padding:0 var(--space-4);overflow-x:auto;flex:1}
 .tab{font-size:13px;padding:10px var(--space-4) 11px;cursor:pointer;color:var(--text3);background:none;border:none;border-bottom:2px solid transparent;border-radius:var(--radius-sm) var(--radius-sm) 0 0;display:flex;align-items:center;gap:6px;white-space:nowrap;transition:color .15s,background .15s;font-family:inherit}
