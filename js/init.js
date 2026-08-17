@@ -1,3 +1,11 @@
+/* ─── PWA: 서비스워커 등록 (설치 가능성 확보용, 오프라인 캐싱 없음) ─── */
+/* file:// 등 미지원 환경에서도 앱 로드를 막지 않도록 안전하게 무시 */
+try{
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+}catch(e){}
+
 /* ─── INIT ─── */
 initTheme();loadSaved();loadBills();loadIdeas();loadMemos();
 // v30 설정 초기 적용
