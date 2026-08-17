@@ -26,6 +26,7 @@
   <div class="logo" onclick="switchTab('home')" style="cursor:pointer" title="홈으로">변덕쟁이들 <em>OS</em></div>
   <div class="hd-right">
     <span class="saved-tag" id="saved-tag">저장 안 됨</span>
+    <span class="saved-tag" id="backup-tag" title="마지막으로 JSON 파일로 내보내기(백업)한 시각"></span>
     <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="다크모드 (D)">&#9788;</button>
     <button class="btn-sm" onclick="openSearch()" title="전체 검색 (Ctrl+K)"><i class="ti ti-search"></i></button>
     <button class="btn-sm" onclick="openSnapModal()" title="데이터 복원"><i class="ti ti-history"></i></button>
@@ -110,6 +111,7 @@
     <div><div class="hd-greeting" id="hm-greeting"></div><div class="hd-date" id="hm-date"></div></div>
     <div class="mp-wrap"><div class="mp-top"><span id="hm-month"></span><span id="hm-mpct"></span></div><div class="mp-bg"><div class="mp-fill" id="hm-mfill" style="width:0%"></div></div></div>
   </div>
+  <div id="hm-backup-banner"></div>
   <div class="qa-row" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
     <div class="qa-card" onclick="switchTab('crm')"><div class="qa-card-icon">&#128101;</div><div class="qa-card-lbl">파이프라인</div></div>
     <div class="qa-card" onclick="switchTab('rv')"><div class="qa-card-icon">&#128200;</div><div class="qa-card-lbl">수익 예측</div></div>
@@ -998,7 +1000,7 @@
       <button onclick="closeSnapModal()" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">&#10005;</button>
     </div>
     <div id="snap-list" style="max-height:320px;overflow-y:auto"></div>
-    <div style="padding:10px 14px;border-top:.5px solid var(--border);font-size:10px;color:var(--text3)">최근 7일 자동 스냅샷. 복원 시 현재 데이터를 덮어씁니다.</div>
+    <div style="padding:10px 14px;border-top:.5px solid var(--border);font-size:10px;color:var(--text3);line-height:1.6">최근 7일 자동 스냅샷. 복원 시 현재 데이터를 덮어씁니다.<br>⚠️ 스냅샷은 이 브라우저에만 저장돼요. 백업 파일을 대신하지 않으니, 헤더의 <b>JSON</b> 내보내기로 정기적으로 파일 백업을 해주세요.</div>
   </div>
 </div>
 

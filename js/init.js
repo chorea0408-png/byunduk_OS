@@ -4,6 +4,7 @@ initTheme();loadSaved();loadBills();loadIdeas();loadMemos();
 (function(){var s2=loadSettings();if(s2.rvTarget)rvTarget=s2.rvTarget;})();
 saveSnapshot();
 checkRecurBills();
+renderBackupStatus();
 
 // pre-init partner calc selects
 setTimeout(function(){initPartnerCalc();},200);renderHome();renderCRM();loadSheetsConfig();

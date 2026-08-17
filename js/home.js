@@ -34,6 +34,7 @@ function renderHome(){
   const gs=['새벽이네요, 형준','좋은 아침이에요, 형준','안녕하세요, 형준','수고하셨어요, 형준'];
   document.getElementById('hm-greeting').textContent=gs[h<5?0:h<12?1:h<18?2:3];
   document.getElementById('hm-date').textContent=now.toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+  renderBackupBanner();
   renderDday();
   const dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
   const dom=now.getDate();const mpct=Math.round(dom/dim*100);

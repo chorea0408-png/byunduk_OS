@@ -79,22 +79,101 @@ function exportJSON(){
   a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(d,null,2));
   a.download='변덕쟁이들_OS_'+new Date().toLocaleDateString('ko').replace(/\./g,'-').replace(/ /g,'')+'.json';
   a.click();
+  try{localStorage.setItem(BACKUP_KEY,String(Date.now()));}catch(e){}
+  renderBackupStatus();
+  renderBackupBanner();
 }
 
 function importJSON(input){
   const file=input.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=e=>{
+    let d;
     try{
-      const d=JSON.parse(e.target.result);
+      d=JSON.parse(e.target.result);
+    }catch(err){
+      showToast('❌ 파일을 읽을 수 없어요. JSON 형식이 올바른지 확인해주세요.','error');
+      input.value='';
+      return;
+    }
+    // 최상위 구조 검증: 변덕쟁이들 OS 내보내기 파일이 맞는지 확인 (clients 배열 필수)
+    if(!d||typeof d!=='object'||Array.isArray(d)||!Array.isArray(d.clients)){
+      showToast('❌ 변덕쟁이들 OS에서 내보낸 파일이 아닌 것 같아요. 가져오기를 취소했어요.','error');
+      input.value='';
+      return;
+    }
+    if(!confirm('현재 데이터를 가져온 파일로 덮어씁니다. 계속할까요?\n(가져오기 직전 상태는 자동으로 스냅샷에 저장되어, 문제가 생기면 상단의 데이터 복원에서 되돌릴 수 있어요.)')){
+      input.value='';
+      return;
+    }
+    try{
+      saveSnapshot(true);// 가져오기 직전 현재 상태를 강제로 스냅샷 저장 (복구용 안전장치)
       if(d.clients){clients=d.clients;nid=Math.max(...clients.map(x=>x.id),0)+1;}
       if(d.capHours){capHours=d.capHours;document.getElementById('cap-sl').value=capHours;document.getElementById('cap-sv').textContent=capHours+'h';}
       if(d.rvTarget){rvTarget=d.rvTarget;document.getElementById('rv-tsl').value=rvTarget;document.getElementById('rv-tv').textContent=rvTarget+'만';}
       if(d.rvCost!==undefined){rvCost=d.rvCost;document.getElementById('rv-csl').value=rvCost;document.getElementById('rv-cv').textContent=rvCost+'만';}
-      renderCRM();save();alert('불러오기 완료!');
-    }catch(err){alert('파일 형식이 올바르지 않아요.');}
+      renderCRM();save();renderHome();
+      showToast('✅ 불러오기 완료!','success');
+    }catch(err){
+      showToast('❌ 가져오기 중 오류가 발생했어요: '+err.message,'error');
+    }
   };
   reader.readAsText(file);input.value='';
+}
+
+// ─── 마지막 백업일 표시 & 백업 권유 배너 ───
+var BACKUP_KEY='vd_last_export';
+var BACKUP_DISMISS_KEY='vd_backup_banner_dismiss';
+var BACKUP_NAG_DAYS=7;// 이 기간(일)보다 오래되면 경고/배너 노출
+var BACKUP_DISMISS_DAYS=5;// 배너를 닫으면 이 기간 동안은 다시 안 띄움
+
+function daysSince(ts){
+  if(!ts)return null;
+  return Math.floor((Date.now()-ts)/86400000);
+}
+
+function renderBackupStatus(){
+  var el=document.getElementById('backup-tag');
+  if(!el)return;
+  var ts=parseInt(localStorage.getItem(BACKUP_KEY))||0;
+  if(!ts){
+    el.textContent='백업 기록 없음';
+    el.style.color='var(--red)';
+    return;
+  }
+  var d=daysSince(ts);
+  var label=d<=0?'오늘':d===1?'어제':d+'일 전';
+  el.textContent='마지막 백업: '+label;
+  el.style.color=d>BACKUP_NAG_DAYS?'var(--amber)':'var(--text3)';
+}
+
+function shouldShowBackupBanner(){
+  var ts=parseInt(localStorage.getItem(BACKUP_KEY))||0;
+  var isOld=!ts||daysSince(ts)>BACKUP_NAG_DAYS;
+  if(!isOld)return false;
+  var dismissedAt=parseInt(localStorage.getItem(BACKUP_DISMISS_KEY))||0;
+  if(dismissedAt&&daysSince(dismissedAt)<BACKUP_DISMISS_DAYS)return false;
+  return true;
+}
+
+function renderBackupBanner(){
+  var el=document.getElementById('hm-backup-banner');
+  if(!el)return;
+  if(!shouldShowBackupBanner()){el.innerHTML='';return;}
+  el.innerHTML='<div class="home-card" style="border-color:var(--amber);display:flex;align-items:center;gap:12px;margin-bottom:14px">'+
+    '<i class="ti ti-cloud-off" style="font-size:20px;color:var(--amber);flex-shrink:0"></i>'+
+    '<div style="flex:1;min-width:0">'+
+      '<div style="font-size:13px;font-weight:600;margin-bottom:2px">데이터가 이 브라우저에만 저장되고 있어요</div>'+
+      '<div style="font-size:12px;color:var(--text2)">최근 백업이 없어요. 지금 파일로 내보내서 안전하게 보관하세요.</div>'+
+    '</div>'+
+    '<button class="btn btn-primary" onclick="exportJSON()" style="flex-shrink:0;white-space:nowrap"><i class="ti ti-download" style="font-size:12px;margin-right:3px"></i>지금 백업</button>'+
+    '<button onclick="dismissBackupBanner()" title="닫기" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3);flex-shrink:0">&#10005;</button>'+
+    '</div>';
+}
+
+function dismissBackupBanner(){
+  try{localStorage.setItem(BACKUP_DISMISS_KEY,String(Date.now()));}catch(e){}
+  renderBackupBanner();
 }
 
 // ─── 월별 실제 매출 (청구서 기준 자동 계산) ───
