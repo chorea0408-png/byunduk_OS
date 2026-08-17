@@ -26,6 +26,7 @@
   <div class="logo" onclick="switchTab('home')" style="cursor:pointer" title="홈으로">변덕쟁이들 <em>OS</em></div>
   <div class="hd-right">
     <span class="saved-tag" id="saved-tag">저장 안 됨</span>
+    <span class="saved-tag" id="backup-tag" title="마지막으로 JSON 파일로 내보내기(백업)한 시각"></span>
     <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="다크모드 (D)">&#9788;</button>
     <button class="btn-sm" onclick="openSearch()" title="전체 검색 (Ctrl+K)"><i class="ti ti-search"></i></button>
     <button class="btn-sm" onclick="openSnapModal()" title="데이터 복원"><i class="ti ti-history"></i></button>
@@ -110,6 +111,7 @@
     <div><div class="hd-greeting" id="hm-greeting"></div><div class="hd-date" id="hm-date"></div></div>
     <div class="mp-wrap"><div class="mp-top"><span id="hm-month"></span><span id="hm-mpct"></span></div><div class="mp-bg"><div class="mp-fill" id="hm-mfill" style="width:0%"></div></div></div>
   </div>
+  <div id="hm-backup-banner"></div>
   <div class="qa-row" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
     <div class="qa-card" onclick="switchTab('crm')"><div class="qa-card-icon">&#128101;</div><div class="qa-card-lbl">파이프라인</div></div>
     <div class="qa-card" onclick="switchTab('rv')"><div class="qa-card-icon">&#128200;</div><div class="qa-card-lbl">수익 예측</div></div>
@@ -998,7 +1000,7 @@
       <button onclick="closeSnapModal()" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">&#10005;</button>
     </div>
     <div id="snap-list" style="max-height:320px;overflow-y:auto"></div>
-    <div style="padding:10px 14px;border-top:.5px solid var(--border);font-size:10px;color:var(--text3)">최근 7일 자동 스냅샷. 복원 시 현재 데이터를 덮어씁니다.</div>
+    <div style="padding:10px 14px;border-top:.5px solid var(--border);font-size:10px;color:var(--text3);line-height:1.6">최근 7일 자동 스냅샷. 복원 시 현재 데이터를 덮어씁니다.<br>⚠️ 스냅샷은 이 브라우저에만 저장돼요. 백업 파일을 대신하지 않으니, 헤더의 <b>JSON</b> 내보내기로 정기적으로 파일 백업을 해주세요.</div>
   </div>
 </div>
 
@@ -1077,6 +1079,33 @@
   </div>
 </div>
 <div id="toast-container"></div>
+
+<!-- 첫 방문 온보딩 모달: 저장된 데이터가 전혀 없는 경우에만 JS에서 .open 클래스를 붙여 노출 -->
+<div class="modal-bg" id="welcome-modal">
+  <div class="modal" style="width:440px">
+    <h3>&#128075; 변덕쟁이들 OS에 오신 걸 환영해요</h3>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:18px">
+      이 앱은 1인 프리랜서·소규모 에이전시를 위한 올인원 업무 대시보드예요.<br>
+      클라이언트 파이프라인, 청구서, 매출, 콘텐츠 아이디어까지 이 브라우저 안에서 관리할 수 있어요.<br>
+      아래에서 시작 방법을 골라주세요.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
+      <button class="btn btn-primary" onclick="chooseOnboarding('empty')" style="padding:12px 14px;text-align:left;line-height:1.5">
+        <div style="font-weight:700;font-size:13px">✨ 빈 상태로 시작하기</div>
+        <div style="font-size:11px;opacity:.85;margin-top:2px;font-weight:400">내 실제 클라이언트 데이터로 바로 채워나가요</div>
+      </button>
+      <button class="btn" onclick="chooseOnboarding('sample')" style="padding:12px 14px;text-align:left;line-height:1.5">
+        <div style="font-weight:700;font-size:13px">🔍 샘플 데이터로 둘러보기</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px">가상의 예시 클라이언트로 기능을 먼저 살펴봐요</div>
+      </button>
+    </div>
+    <div style="font-size:11px;color:var(--text3);line-height:1.8;border-top:.5px solid var(--border);padding-top:12px">
+      &#128161; 왼쪽 상단 탭에서 원하는 기능을 선택하세요<br>
+      &#128190; 데이터는 이 브라우저에 자동 저장돼요<br>
+      &#9889; 정기적으로 헤더의 내보내기(백업)로 파일로도 보관해두면 더 안전해요
+    </div>
+  </div>
+</div>
 
 <!-- MODAL -->
 <div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">

@@ -91,11 +91,11 @@ function renderChannels(){
 
 var SNAP_PFX='vd_snap_',MAX_SNAPS=7;
 
-function saveSnapshot(){
+function saveSnapshot(force){
   var today=new Date().toISOString().slice(0,10);
   var key=SNAP_PFX+today;
   try{
-    if(localStorage.getItem(key))return;// 오늘 이미 저장됨
+    if(!force&&localStorage.getItem(key))return;// 오늘 이미 저장됨 (force=true면 최신 상태로 덮어씀)
     var snap={
       clients:clients,nid:nid,
       bills:bills,billNid:billNid,
