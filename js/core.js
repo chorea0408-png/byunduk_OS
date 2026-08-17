@@ -111,14 +111,22 @@ const ID_DEFAULT=[
   {id:6,title:'소상공인 SNS 운영 실수 TOP 5',    ch:'인스타',  tag:'소상공인',status:'draft',date:'2026-05-21'},
 ];
 
-let clients=[
-  {id:1,name:'해피쿡 분식', typeIdx:0,amount:30, stage:'won',        note:'',tags:['food','small','seoul'],stageEnteredAt:{lead:'2026-05-01',discovery:'2026-05-05',proposal:'2026-05-10',negotiation:'2026-05-15',won:'2026-05-20'},sopDone:[true,true,true,true,true,true,true,true],timeLog:[],closureChecks:['portfolio','review'],wonStatus:'completed',npsScore:5,lostReason:'',reactivateDate:'',deliverables:[{id:1,text:'SNS 계정 분석 리포트',done:true,dueDate:''},{id:2,text:'5월 콘텐츠 발행 완료',done:true,dueDate:''},{id:3,text:'6월 운영 계획서 전달',done:false,dueDate:'2026-06-05'}]},
-  {id:2,name:'강남 네일샵', typeIdx:1,amount:100,stage:'negotiation',note:'',tags:['beauty','medium','seoul'],stageEnteredAt:{lead:'2026-05-08',discovery:'2026-05-13',proposal:'2026-05-18',negotiation:'2026-05-23'},sopDone:[true,true,true,false,false,false,false,false],timeLog:[],closureChecks:[],wonStatus:'',npsScore:null,lostReason:'',reactivateDate:'',deliverables:[{id:1,text:'경쟁사 분석 자료',done:true,dueDate:''},{id:2,text:'광고 크리에이티브 시안 3종',done:false,dueDate:'2026-06-10'},{id:3,text:'캠페인 집행 보고서',done:false,dueDate:'2026-06-30'}]},
-  {id:3,name:'미미 한복',   typeIdx:2,amount:120,stage:'proposal',   note:'',tags:['service','medium','seoul'],stageEnteredAt:{lead:'2026-05-14',discovery:'2026-05-19',proposal:'2026-05-22'},sopDone:[true,true,false,false,false,false,false,false],timeLog:[],closureChecks:[],wonStatus:'',npsScore:null,lostReason:'',reactivateDate:'',deliverables:[{id:1,text:'브랜드 아이덴티티 가이드',done:false,dueDate:'2026-07-01'},{id:2,text:'로고·컬러 시스템 확정',done:false,dueDate:'2026-06-20'}]},
-  {id:4,name:'카페 온도',   typeIdx:3,amount:50, stage:'discovery',  note:'',tags:['food','small','gyeonggi'],stageEnteredAt:{lead:'2026-05-20',discovery:'2026-05-24'},sopDone:[true,false,false,false,false,false,false,false],timeLog:[],closureChecks:[],wonStatus:'',npsScore:null,lostReason:'',reactivateDate:'',contactName:'',contactRole:'',expectedClose:'',deliverables:[]},
-  {id:5,name:'선릉 헬스장', typeIdx:0,amount:30, stage:'lead',       note:'',tags:['fitness','small','seoul'],stageEnteredAt:{lead:'2026-05-25'},sopDone:[],timeLog:[],closureChecks:[],wonStatus:'',npsScore:null,lostReason:'',reactivateDate:'',contactName:'',contactRole:'',expectedClose:'',deliverables:[]},
+// ─── 샘플(데모) 클라이언트 데이터 ───
+// 앱을 처음 여는 사용자가 "샘플 데이터로 둘러보기"를 선택했을 때만 사용되는, 완전히 가상의 예시 데이터.
+// 실제 데이터가 아님을 분명히 하기 위해 이름 앞에 "(샘플)"을 붙이고, 특정 지역명(강남/선릉 등)은
+// 실제 업체로 오인될 수 있어 제거했다. loadSaved()가 저장된 데이터를 찾지 못한 "첫 방문"일 때만
+// initSampleData()를 통해 clients에 복사되며, 그 외에는 절대 자동으로 로드되지 않는다.
+const SAMPLE_CLIENTS=[
+  {id:1,name:'(샘플) 해피쿡 분식', typeIdx:0,amount:30, stage:'won',        note:'',tags:['food','small','seoul'],stageEnteredAt:{lead:'2026-05-01',discovery:'2026-05-05',proposal:'2026-05-10',negotiation:'2026-05-15',won:'2026-05-20'},sopDone:[true,true,true,true,true,true,true,true],timeLog:[],closureChecks:['portfolio','review'],wonStatus:'completed',npsScore:5,lostReason:'',reactivateDate:'',deliverables:[{id:1,text:'SNS 계정 분석 리포트',done:true,dueDate:''},{id:2,text:'5월 콘텐츠 발행 완료',done:true,dueDate:''},{id:3,text:'6월 운영 계획서 전달',done:false,dueDate:'2026-06-05'}]},
+  {id:2,name:'(샘플) 도심 네일샵', typeIdx:1,amount:100,stage:'negotiation',note:'',tags:['beauty','medium','seoul'],stageEnteredAt:{lead:'2026-05-08',discovery:'2026-05-13',proposal:'2026-05-18',negotiation:'2026-05-23'},sopDone:[true,true,true,false,false,false,false,false],timeLog:[],closureChecks:[],wonStatus:'',npsScore:null,lostReason:'',reactivateDate:'',deliverables:[{id:1,text:'경쟁사 분석 자료',done:true,dueDate:''},{id:2,text:'광고 크리에이티브 시안 3종',done:false,dueDate:'2026-06-10'},{id:3,text:'캠페인 집행 보고서',done:false,dueDate:'2026-06-30'}]},
+  {id:3,name:'(샘플) 미미 한복',   typeIdx:2,amount:120,stage:'proposal',   note:'',tags:['service','medium','seoul'],stageEnteredAt:{lead:'2026-05-14',discovery:'2026-05-19',proposal:'2026-05-22'},sopDone:[true,true,false,false,false,false,false,false],timeLog:[],closureChecks:[],wonStatus:'',npsScore:null,lostReason:'',reactivateDate:'',deliverables:[{id:1,text:'브랜드 아이덴티티 가이드',done:false,dueDate:'2026-07-01'},{id:2,text:'로고·컬러 시스템 확정',done:false,dueDate:'2026-06-20'}]},
+  {id:4,name:'(샘플) 카페 온도',   typeIdx:3,amount:50, stage:'discovery',  note:'',tags:['food','small','gyeonggi'],stageEnteredAt:{lead:'2026-05-20',discovery:'2026-05-24'},sopDone:[true,false,false,false,false,false,false,false],timeLog:[],closureChecks:[],wonStatus:'',npsScore:null,lostReason:'',reactivateDate:'',contactName:'',contactRole:'',expectedClose:'',deliverables:[]},
+  {id:5,name:'(샘플) 동네 헬스장', typeIdx:0,amount:30, stage:'lead',       note:'',tags:['fitness','small','seoul'],stageEnteredAt:{lead:'2026-05-25'},sopDone:[],timeLog:[],closureChecks:[],wonStatus:'',npsScore:null,lostReason:'',reactivateDate:'',contactName:'',contactRole:'',expectedClose:'',deliverables:[]},
 ];
-let nid=6,capHours=20,rvTarget=200,rvCost=30;
+// 실제 clients 배열은 항상 빈 상태로 시작한다. 저장된 데이터가 있으면 loadSaved()가 덮어쓰고,
+// 저장된 데이터가 없는 첫 방문이면 온보딩 화면에서 사용자가 "빈 상태"/"샘플 데이터" 중 선택한다.
+let clients=[];
+let nid=1,capHours=20,rvTarget=200,rvCost=30;
 let rvExtra={won:0,neg:0,prop:0,disc:0};
 let rvChart=null,profChart=null;
 let profMode='all';

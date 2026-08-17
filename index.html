@@ -1080,6 +1080,33 @@
 </div>
 <div id="toast-container"></div>
 
+<!-- 첫 방문 온보딩 모달: 저장된 데이터가 전혀 없는 경우에만 JS에서 .open 클래스를 붙여 노출 -->
+<div class="modal-bg" id="welcome-modal">
+  <div class="modal" style="width:440px">
+    <h3>&#128075; 변덕쟁이들 OS에 오신 걸 환영해요</h3>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:18px">
+      이 앱은 1인 프리랜서·소규모 에이전시를 위한 올인원 업무 대시보드예요.<br>
+      클라이언트 파이프라인, 청구서, 매출, 콘텐츠 아이디어까지 이 브라우저 안에서 관리할 수 있어요.<br>
+      아래에서 시작 방법을 골라주세요.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
+      <button class="btn btn-primary" onclick="chooseOnboarding('empty')" style="padding:12px 14px;text-align:left;line-height:1.5">
+        <div style="font-weight:700;font-size:13px">✨ 빈 상태로 시작하기</div>
+        <div style="font-size:11px;opacity:.85;margin-top:2px;font-weight:400">내 실제 클라이언트 데이터로 바로 채워나가요</div>
+      </button>
+      <button class="btn" onclick="chooseOnboarding('sample')" style="padding:12px 14px;text-align:left;line-height:1.5">
+        <div style="font-weight:700;font-size:13px">🔍 샘플 데이터로 둘러보기</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px">가상의 예시 클라이언트로 기능을 먼저 살펴봐요</div>
+      </button>
+    </div>
+    <div style="font-size:11px;color:var(--text3);line-height:1.8;border-top:.5px solid var(--border);padding-top:12px">
+      &#128161; 왼쪽 상단 탭에서 원하는 기능을 선택하세요<br>
+      &#128190; 데이터는 이 브라우저에 자동 저장돼요<br>
+      &#9889; 정기적으로 헤더의 내보내기(백업)로 파일로도 보관해두면 더 안전해요
+    </div>
+  </div>
+</div>
+
 <!-- MODAL -->
 <div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal">

@@ -73,6 +73,44 @@ function loadSaved(){
   }catch(e){}
 }
 
+// ─── 첫 방문 온보딩 (빈 상태 vs 샘플 데이터) ───
+// "첫 방문" 판정은 loadSaved()가 저장 데이터 유무를 확인할 때 쓰는 것과 정확히 동일한 키(vd2_clients)를
+// 기준으로 한다. 이 키가 하나라도 존재하면(빈 배열 '[]'이 저장돼 있어도 truthy) 절대 첫 방문으로
+// 취급하지 않으며, 온보딩 화면은 뜨지 않는다. 기존/실사용 데이터가 있는 사용자는 영향을 받지 않는다.
+function isFirstRun(){
+  try{return !localStorage.getItem('vd2_clients');}catch(e){return false;}
+}
+
+function showWelcome(){
+  var m=document.getElementById('welcome-modal');
+  if(m)m.classList.add('open');
+}
+
+function hideWelcome(){
+  var m=document.getElementById('welcome-modal');
+  if(m)m.classList.remove('open');
+}
+
+function initEmptyData(){
+  clients=[];
+  nid=1;
+}
+
+function initSampleData(){
+  // 샘플 데이터는 깊은 복사로 사용 — 원본 SAMPLE_CLIENTS 상수를 훼손하지 않는다.
+  clients=SAMPLE_CLIENTS.map(function(c){return JSON.parse(JSON.stringify(c));});
+  nid=Math.max.apply(null,clients.map(function(c){return c.id;}).concat([0]))+1;
+}
+
+function chooseOnboarding(mode){
+  if(mode==='sample')initSampleData();else initEmptyData();
+  save();// vd2_clients가 즉시 저장되어, 다음 방문부터는 isFirstRun()이 false를 반환한다.
+  try{saveSnapshot(true);}catch(e){}// 오늘자 스냅샷을 사용자의 실제 선택 상태로 갱신
+  hideWelcome();
+  if(typeof renderHome==='function')renderHome();
+  if(typeof renderCRM==='function')renderCRM();
+}
+
 function exportJSON(){
   const d={clients,capHours,rvTarget,rvCost,exportedAt:new Date().toISOString()};
   const a=document.createElement('a');
